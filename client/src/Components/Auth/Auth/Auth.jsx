@@ -19,7 +19,7 @@ function Auth() {
     return (
         <Container>
             <div>Auth</div>
-            <div>current user: { newUser.name }</div>
+            <div>current user: { newUser?.name }</div>
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Control type="text" placeholder="create user" onInput={(e) => createNewUser(e.target.value)}/>
             </Form.Group>

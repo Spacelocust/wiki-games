@@ -3,9 +3,7 @@ import { atom } from 'recoil';
 const store = atom({
     key: 'store',
     default: {
-        user: {
-            name: 'test',
-        },
+        user: {},
         games: [],
         leagues: [],
         teams: [],

@@ -1,47 +1,25 @@
 import React from 'react';
-import { Col, Container, Figure, Row } from "react-bootstrap";
 import { createUseStyles } from "react-jss";
+import { Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function Landing() {
     const classes = useStyles();
 
     return (
-        <Container>
-            <Row>
-                <Col md={12}>
-                    <Figure>
-                        <Figure.Image
-                            width={171}
-                            height={180}
-                            alt="171x180"
-                            src="holder.js/171x180"
-                        />
-                        <Figure.Caption>
-                            Nulla vitae elit libero, a pharetra augue mollis interdum.
-                        </Figure.Caption>
-                    </Figure>
-                </Col>
-                <Col md={12} className='d-flex justify-content-end'>
-                    <Figure>
-                        <Figure.Image
-                            width={171}
-                            height={180}
-                            alt="171x180"
-                            src="holder.js/171x180"
-                        />
-                        <Figure.Caption>
-                            Nulla vitae elit libero, a pharetra augue mollis interdum.
-                        </Figure.Caption>
-                    </Figure>
-                </Col>
-            </Row>
-        </Container>
+       <Container className={classes.parentContainer}>
+           <div className='d-flex justify-content-center align-items-center'>
+               <Link to='/home/games' className='btn btn-primary'>Games</Link>
+               <Link to='/auth' className='btn btn-primary'>Connexion</Link>
+           </div>
+       </Container>
     );
 }
 
 const useStyles = createUseStyles({
-    container: {
-        width: '100%',
+    parentContainer: {
+        height: '100vh!important',
+        alignItems: 'center',
     }
 });
 
