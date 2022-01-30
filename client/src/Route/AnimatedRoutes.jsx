@@ -2,12 +2,11 @@ import React from 'react';
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
-import Landing from "../Components/Landing/Landing";
-import Guard from "../Components/Auth/Guard/Guard";
+
 import Home from "../Components/Home/Home";
-import Games from "../Components/Games/Games/Games";
-import Game from "../Components/Games/Games/Game/Game";
-import Auth from "../Components/Auth/Auth/Auth";
+import Games from "../Components/GamesComponents/Games/Games";
+import Game from "../Components/GamesComponents/Games/Game/Game";
+import Auth from "../Components/AuthComponents/Auth/Auth";
 
 function AnimatedRoutes() {
     const location = useLocation();
@@ -15,8 +14,8 @@ function AnimatedRoutes() {
     return (
         <AnimatePresence exitBeforeEnter>
             <Routes location={location} key={location.pathname}>
-                <Route index element={<Landing/>}/>
-                <Route path="/home" element={<Guard><Home/></Guard>}>
+                <Route path="/" element={<Home/>}>
+                    <Route path="/register" element={<div>register</div>}/>
                     <Route path="/home/games" element={<Games/>}/>
                     <Route path="/home/games/:id" element={<Game/>}/>
                 </Route>

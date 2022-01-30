@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { motion } from "framer-motion";
 
 import { listGames } from "../Selector/GamesSelector";
-import Card from "../../Card/Card";
+import Card from "../../GeneralComponents/Cards/Card";
 
 function Games() {
     const [currentListGames, setCurrentListGames] = useRecoilState(listGames);
