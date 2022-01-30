@@ -6,22 +6,23 @@ import { FontAwesomeIcon as IconSetter } from "@fortawesome/react-fontawesome";
 import OffcanvasMenu from "../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu";
 import NavButton from "../../GeneralComponents/Buttons/NavButtonComponent/NavButton";
 import NavButtonLabel from "../../GeneralComponents/Buttons/NavButtonComponent/NavButtonLabel";
+import Login from "../../AuthComponents/Auth/Login";
 
 function NavBar() {
     const [showMenu, setShowMenu] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
 
     const onCloseMenu = () => setShowMenu(false);
-    const onCloseLogin = () => setShowMenu(false);
+    const onCloseLogin = () => setShowLogin(false);
 
     const onShowMenu = () => {
         setShowMenu(!showMenu);
-        setShowLogin(false);
+        onCloseLogin();
     };
 
     const onShowLogin = () => {
         setShowLogin(!showLogin);
-        setShowMenu(false);
+        onCloseMenu();
     };
 
 
@@ -29,7 +30,7 @@ function NavBar() {
         <>
             <Navbar bg="light" variant="light" fixed="top">
                 <NavButton showState={showMenu} onClick={onShowMenu}/>
-                <Navbar.Brand href="#home" className='font-lemon'>
+                <Navbar.Brand className='font-lemon'>
                     <IconSetter icon={faTrophy} className='mx-2'/>
                     WikiGames
                 </Navbar.Brand>
@@ -39,7 +40,7 @@ function NavBar() {
                 </div>
             </Navbar>
             <OffcanvasMenu show={showLogin} closeCallback={onCloseLogin} position='end'>
-                <div className='text-light'>login</div>
+                <Login />
             </OffcanvasMenu>
             <OffcanvasMenu show={showMenu} closeCallback={onCloseMenu}>
                 <div>menu</div>
