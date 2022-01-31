@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Button from "react-bootstrap/Button";
 import { createUseStyles } from 'react-jss';
+import { motion } from 'framer-motion';
 
 import ContainerComponent from "../../GeneralComponents/ContainerComponent/ContainerComponent";
 
@@ -21,9 +22,35 @@ const RegisterSchema = Yup.object().shape({
 function Register() {
     const classes = useStyles();
 
+    const container = {
+        hidden: { opacity: 1, scale: 0 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                delayChildren: 0.3,
+                staggerChildren: 0.2,
+            }
+        },
+        exit: {
+            opacity: 1,
+            scale: 0,
+            transition: {
+                delayChildren: 0.3,
+                staggerChildren: 0.2,
+            }
+        }
+    };
+
     return (
         <ContainerComponent>
-            <div className='d-flex justify-content-center align-items-center h-100'>
+            <motion.div
+                className='d-flex justify-content-center align-items-center h-100'
+                variants={container}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+            >
                 <Formik
                     initialValues={{
                         email: '',
@@ -38,34 +65,34 @@ function Register() {
                     {formik => (<>
                         <Form onSubmit={formik.handleSubmit} className={classes.form}>
                             <h2 className="d-flex flex-column mb-5">
-                                <span className="font-secular text-uppercase">Inscrivez-vous sur</span>
+                                <span className="font-secular-uppercase text-medium">Inscrivez-vous sur</span>
                                 <span className="text-light font-lemon">WikiGames&#174;</span>
                             </h2>
                             <div className="form-group mb-4">
                                 <label htmlFor="email"
-                                       className={`text-uppercase font-secular ${classes.labelField}`}>Email</label>
+                                       className={`font-secular-uppercase text-medium ${classes.labelField}`}>Email</label>
                                 <Field name="email" type="email" className={`form-control ${classes.field}`}/>
                             </div>
                             <div className="form-group mb-4">
                                 <label htmlFor="username"
-                                       className={`text-uppercase font-secular ${classes.labelField}`}>Pseudonyme</label>
+                                       className={`font-secular-uppercase text-medium ${classes.labelField}`}>Pseudonyme</label>
                                 <Field name="username" type="text" className={`form-control ${classes.field}`}/>
                             </div>
                             <div className="form-group mb-4">
-                                <label htmlFor="email" className={`text-uppercase font-secular ${classes.labelField}`}>mot
+                                <label htmlFor="email" className={`font-secular-uppercase text-mediumr ${classes.labelField}`}>mot
                                     de passe</label>
                                 <Field name="password" type="password" className={`form-control ${classes.field}`}/>
                             </div>
                             <div className="form-group mb-4">
-                                <label htmlFor="email" className={`text-uppercase font-secular ${classes.labelField}`}>Confirmation
+                                <label htmlFor="email" className={`font-secular-uppercase text-medium ${classes.labelField}`}>Confirmation
                                     de mot de passe</label>
                                 <Field name="password" type="password" className={`form-control ${classes.field}`}/>
                             </div>
-                            <Button className={`${classes.button} text-uppercase font-secular`}>Inscription</Button>
+                            <Button className={`font-secular-uppercase text-medium ${classes.button}`}>Inscription</Button>
                         </Form>
                     </>)}
                 </Formik>
-            </div>
+            </motion.div>
         </ContainerComponent>
     );
 }
@@ -88,7 +115,6 @@ const useStyles = createUseStyles({
         }
     },
     labelField: {
-        fontSize: '1.2rem',
         color: '#fff',
     },
     button: {

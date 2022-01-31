@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 import { listGames } from "../Selector/GamesSelector";
 import Card from "../../GeneralComponents/Cards/Card";
+import ContainerComponent from "../../GeneralComponents/ContainerComponent/ContainerComponent";
 
 function Games() {
     const [currentListGames, setCurrentListGames] = useRecoilState(listGames);
@@ -41,7 +42,7 @@ function Games() {
     }, []);
 
     return (
-        <>
+        <ContainerComponent>
             <motion.div
                 className="container mt-5 d-flex flex-wrap justify-content-center"
                 variants={container}
@@ -53,7 +54,7 @@ function Games() {
                     <Card key={game.id} url={game.img_url} name={game.name} id={game.id}/>
                 ))}
             </motion.div>
-        </>
+        </ContainerComponent>
     );
 }
 

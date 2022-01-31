@@ -36,8 +36,32 @@ a {
   cursor: pointer;
 }
 
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.font {
+  &-small {
+    font-size: 1rem;
+  }
+  &-medium {
+    font-size: 1.2rem;
+  }
+  &-large {
+    font-size: 1.5rem;
+  }
+}
+
 .font-secular {
   font-family: 'Secular One', sans-serif;
+  &-uppercase {
+    text-transform: uppercase;
+    font-family: 'Secular One', sans-serif;
+  }
 }
 
 .font-lemon {

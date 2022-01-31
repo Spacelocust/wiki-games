@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Navbar } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import Navbar from 'react-bootstrap/Navbar';
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as IconSetter } from "@fortawesome/react-fontawesome";
+import LinkContainer from 'react-router-bootstrap/LinkContainer';
 
 import OffcanvasMenu from "../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu";
 import NavButton from "../../GeneralComponents/Buttons/NavButtonComponent/NavButton";
+import NavMenu from "../NavMenu/NavMenu";
 import NavButtonLabel from "../../GeneralComponents/Buttons/NavButtonComponent/NavButtonLabel";
 import Login from "../../AuthComponents/Auth/Login";
 
@@ -25,15 +27,16 @@ function NavBar() {
         onCloseMenu();
     };
 
-
     return (
         <>
             <Navbar bg="light" variant="light" fixed="top">
                 <NavButton showState={showMenu} onClick={onShowMenu}/>
-                <Navbar.Brand className='font-lemon'>
-                    <IconSetter icon={faTrophy} className='mx-2'/>
-                    WikiGames
-                </Navbar.Brand>
+                <LinkContainer to='/'>
+                    <Navbar.Brand className='font-lemon'>
+                        <IconSetter icon={faTrophy} className='mx-2'/>
+                        WikiGames
+                    </Navbar.Brand>
+                </LinkContainer>
                 <div className='d-flex justify-content-end w-100 h-100'>
                     <NavButtonLabel label="s'inscrire" link='/register'/>
                     <NavButtonLabel label="connexion" onClick={onShowLogin}/>
@@ -43,7 +46,7 @@ function NavBar() {
                 <Login />
             </OffcanvasMenu>
             <OffcanvasMenu show={showMenu} closeCallback={onCloseMenu}>
-                <div>menu</div>
+                <NavMenu />
             </OffcanvasMenu>
         </>
     );

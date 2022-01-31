@@ -19,7 +19,6 @@ function Card({ url, name, id = null }) {
         }
     };
 
-
     return (
         <Link to={`${pathname}/${id}`} className={classes.link}>
             <motion.div className={`${classes.card} card m-1`} style={{ width: '15rem' }} variants={item}
