@@ -24,12 +24,12 @@ function Login() {
                             <Field name="email" type="email" className={`form-control ${classes.field}`}/>
                         </div>
                         <div className="form-group mb-4">
-                            <label htmlFor="email" className={`text-uppercase font-secular ${classes.labelField}`}>mot de passe</label>
+                            <label htmlFor="password" className={`text-uppercase font-secular ${classes.labelField}`}>Mot de passe</label>
                             <Field name="password" type="password" className={`form-control ${classes.field}`}/>
                         </div>
                         <div className="form-check mb-4">
                             <Field type="checkbox" name="checked" className="form-check-input"/>
-                            <label htmlFor="checked" className={`${classes.labelCheckbox} form-check-label`}>Se souvenir ?</label>
+                            <label htmlFor="checked" className={`form-check-label ${classes.labelCheckbox}`}>Se souvenir ?</label>
                         </div>
                         <Button className={`${classes.button} text-uppercase font-secular`}>Connexion</Button>
                     </Form>

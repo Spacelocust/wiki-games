@@ -6,6 +6,7 @@ import { createUseStyles } from 'react-jss';
 import { motion } from 'framer-motion';
 
 import ContainerComponent from "../../GeneralComponents/ContainerComponent/ContainerComponent";
+import BackButtonComponent from '../../GeneralComponents/Buttons/BackButtonComponent/BackButtonComponent';
 
 const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -44,6 +45,7 @@ function Register() {
 
     return (
         <ContainerComponent>
+            <BackButtonComponent />
             <motion.div
                 className='d-flex justify-content-center align-items-center h-100'
                 variants={container}

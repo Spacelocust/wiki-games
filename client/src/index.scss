@@ -31,6 +31,18 @@ body {
   }
 }
 
+@keyframes rainbow {
+  0%{color: #FF0000;}
+  14%{color: #FF7F00;}
+  28%{color: #FFFF00;}
+  42%{color: #00FF00;}
+  56%{color: #0000FF;}
+  70%{color: #4B0082;}
+  84%{color: #9400D3;}
+  98%{color: #d300c8;}
+  100%{color: #f50495;}
+}
+
 a {
   text-decoration: none;
   cursor: pointer;
@@ -53,6 +65,9 @@ li {
   }
   &-large {
     font-size: 1.5rem;
+  }
+  &-rainbow {
+    animation: 1s infinite rainbow ease-in-out;
   }
 }
 

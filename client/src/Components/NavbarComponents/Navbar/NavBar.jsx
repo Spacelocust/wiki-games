@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as IconSetter } from "@fortawesome/react-fontawesome";

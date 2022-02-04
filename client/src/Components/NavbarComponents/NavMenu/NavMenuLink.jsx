@@ -49,12 +49,11 @@ function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
     return (
         <>
             <div className={classes.container}>
-
                 <LinkContainer to={to}>
-                    <li className={`font-secular-uppercase ${classes.link}`}>{img && <img src={img} alt="" className={classes.img}/>}{text}</li>
+                    <li className={`font-secular-uppercase ${classes.link}`}>{img &&
+                        <img src={img} alt="" className={classes.img}/>}{text}</li>
                 </LinkContainer>
-                {children && <IconSetter icon={open ? faMinus : faPlus} className={classes.icon}
-                                         onClick={() => setOpen(!open)}/>}
+                {children && <IconSetter icon={open ? faMinus : faPlus} className={classes.icon} onClick={() => setOpen(!open)}/>}
             </div>
 
             {children && <Collapse in={open}>
