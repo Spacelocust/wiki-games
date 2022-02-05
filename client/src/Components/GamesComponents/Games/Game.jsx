@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { ListGroup } from 'react-bootstrap';
 import isEmpty from 'lodash/isEmpty';
 import axios from 'axios';
 
@@ -11,6 +12,7 @@ import overwatch from '../../../assets/images/overwatch.gif';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import BackButtonComponent from '../../GeneralComponents/Buttons/BackButtonComponent/BackButtonComponent';
 import Leagues from '../../LeaguesComponents/GameLeagues/Leagues';
+import MatchScore from '../../MatchComponent/MatchScore';
 
 function Game() {
     const params = useParams();
@@ -19,7 +21,7 @@ function Game() {
 
     const getGame = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:5000/api/games/${params.id}`);
+            const { data } = await axios.get(`/games/${params.id}`);
             setTimeout(() => {
                 setGame(data);
                 setLeagues(data.leagues);
@@ -85,6 +87,36 @@ function Game() {
                         className="bg-dark text-light rounded"
                     >
                         <h2 className="font-secular m-2">Matchs</h2>
+                        <div className="row">
+                            <div className="col-md-4">
+                                <MatchScore />
+                                <ListGroup>
+                                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                                    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                                    <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+                                    <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                                    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                                </ListGroup>
+                            </div>
+                            <div className="col-md-4">
+                                <ListGroup>
+                                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                                    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                                    <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+                                    <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                                    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                                </ListGroup>
+                            </div>
+                            <div className="col-md-4">
+                                <ListGroup>
+                                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                                    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                                    <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+                                    <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                                    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                                </ListGroup>
+                            </div>
+                        </div>
                     </motion.div>
                 </BodyComponent>
             </div>
