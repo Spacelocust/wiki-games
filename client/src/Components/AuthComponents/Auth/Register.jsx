@@ -45,7 +45,6 @@ function Register() {
 
     return (
         <ContainerComponent>
-            <BackButtonComponent />
             <motion.div
                 className='d-flex justify-content-center align-items-center h-100'
                 variants={container}
@@ -90,6 +89,7 @@ function Register() {
                                     de mot de passe</label>
                                 <Field name="password" type="password" className={`form-control ${classes.field}`}/>
                             </div>
+                            <BackButtonComponent />
                             <Button className={`font-secular-uppercase text-medium ${classes.button}`}>Inscription</Button>
                         </Form>
                     </>)}

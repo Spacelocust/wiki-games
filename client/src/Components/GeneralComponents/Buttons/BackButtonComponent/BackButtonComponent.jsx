@@ -3,16 +3,21 @@ import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import { useNavigate, useLocation } from 'react-router-dom';
+import isEmpty from 'lodash/isEmpty';
 
 function BackButtonComponent() {
     const navigate = useNavigate();
     const location = useLocation();
+
     const back = () => {
         let url = location.pathname.split('/');
-        navigate(`${url.slice(0, url.length - 1).join('/')}`);
+        url = url.slice(0, url.length - 1).join('/');
+
+        navigate(`${isEmpty(url) ? '/' : url}`);
     };
 
-    return <Button className="btn btn-secondary" onClick={() => back()}><IconSetter icon={faArrowLeft} className="mx-2"/> Retour</Button>;
+    return <Button className="btn btn-secondary my-2 font-secular-uppercase" onClick={() => back()}><IconSetter icon={faArrowLeft}
+                                                                                    className="mx-2"/> Retour</Button>;
 }
 
 export default BackButtonComponent;

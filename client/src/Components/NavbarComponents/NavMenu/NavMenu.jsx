@@ -1,26 +1,36 @@
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { listGames } from '../../GamesComponents/Selector/GamesSelector';
 import axios from 'axios';
 
+import { listGames } from '../../GamesComponents/Selector/GamesSelector';
 import NavMenuLink from './NavMenuLink';
 import WrapperSize from '../../GeneralComponents/Wrappers/WrapperSize';
 
 function NavMenu() {
     const [currentListGames, setCurrentListGames] = useRecoilState(listGames);
-    const games = async () => {
-        try {
-            const { data } = await axios.get('http://localhost:5000/api/games');
-            setTimeout(() => {
-                setCurrentListGames(data);
-            }, 1000);
-        } catch (e) {
-            console.log(e);
-        }
-    };
 
     useEffect(() => {
-        games();
+        const source = axios.CancelToken.source()
+        const getGames = async () => {
+            try {
+                const { data } = await axios.get('/games',{
+                    cancelToken: source.token,
+                });
+                setTimeout(() => {
+                    setCurrentListGames(data);
+                }, 1000);
+            } catch (e) {
+                if (axios.isCancel(e)) {
+                } else {
+                    throw e
+                }
+            }
+        };
+        getGames()
+
+        return () => {
+            source.cancel()
+        }
     }, []);
 
     return (

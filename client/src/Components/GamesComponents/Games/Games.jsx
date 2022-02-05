@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 import { listGames } from '../Selector/GamesSelector';
 import ContainerComponent from '../../GeneralComponents/ContainerComponent/ContainerComponent';
@@ -11,15 +11,29 @@ import LoaderGif from '../../LoaderComponents/LoaderGif';
 function Games() {
     const [currentListGames, setCurrentListGames] = useRecoilState(listGames);
     const [loader, setLoader] = useState(true);
-    const games = async () => {
-        try {
-            const { data } = await axios.get('http://localhost:5000/api/games');
-            setLoader(false);
-            setCurrentListGames(data);
-        } catch (e) {
-            console.log(e);
+
+    useEffect(() => {
+        const source = axios.CancelToken.source()
+        const getGames = async () => {
+            try {
+                const { data } = await axios.get('/games',{
+                    cancelToken: source.token,
+                });
+                setLoader(false);
+                setCurrentListGames(data);
+            } catch (e) {
+                if (axios.isCancel(e)) {
+                } else {
+                    throw e
+                }
+            }
+        };
+        getGames()
+
+        return () => {
+            source.cancel()
         }
-    };
+    }, []);
 
     const container = {
         hidden: { opacity: 1, scale: 0 },
@@ -38,11 +52,6 @@ function Games() {
             }
         }
     };
-
-
-    useEffect(() => {
-        games();
-    }, []);
 
     return (
         <ContainerComponent>
