@@ -28,3 +28,17 @@ export const getGame = async (req, res) => {
         res.status(500).send(e);
     }
 }
+
+export const getGameMatches = async (req, res) => {
+    try {
+        const { data } = await api.get(`/matches?filter[videogame]=${req.params.id}`)
+        res.set({
+            'Content-Type': 'application/json',
+            'Cache-Control': 'max-age: 60',
+        });
+        res.send(data);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+}
+
