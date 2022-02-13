@@ -5,6 +5,7 @@ import axios from 'axios';
 import { listGames } from '../../GamesComponents/Selector/GamesSelector';
 import NavMenuLink from './NavMenuLink';
 import WrapperSize from '../../GeneralComponents/Wrappers/WrapperSize';
+import { isEmpty } from 'lodash';
 
 function NavMenu() {
     const [currentListGames, setCurrentListGames] = useRecoilState(listGames);
@@ -40,7 +41,7 @@ function NavMenu() {
                 <NavMenuLink colorHover="#e73c7e" text="Jeux" to="/games">
                     <WrapperSize>
                         {
-                            currentListGames ? [...currentListGames].reverse().map((game) => (
+                            !isEmpty(currentListGames) ? [...currentListGames].reverse().map((game) => (
                                 <NavMenuLink key={game.id} colorHover="#23a6d5" text={game.name} img={game.img_url}
                                              to={`/games/${game.id}`}/>
                             )) : <li className="font-rainbow">Just wait it's magic time..</li>

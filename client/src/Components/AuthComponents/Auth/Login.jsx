@@ -1,7 +1,11 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
-import Button from "react-bootstrap/Button";
+import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import { createUseStyles } from 'react-jss';
+
+import InputControl from '../../GeneralComponents/Inputs/InputControl';
+import axios from 'axios';
 
 function Login() {
     const classes = useStyles();
@@ -11,27 +15,41 @@ function Login() {
             <Formik
                 initialValues={{
                     email: '',
-                    password: '',
+                    password: ''
                 }}
-                onSubmit={values => {
-                    console.log(values);
+                onSubmit={async (formData, actions) => {
+                    try {
+                        const { data } = await axios.post('/login', formData);
+                        console.log(data);
+                    } catch (e) {
+                        actions.setFieldError('password', 'Erreur: Email ou mot de passe incorrect');
+                    }
                 }}
             >
-                {formik => (
-                    <Form onSubmit={formik.handleSubmit}>
+                {({ handleSubmit, errors, touched, isSubmitting }) => (
+                    <Form onSubmit={handleSubmit}>
                         <div className="form-group mb-4">
-                            <label htmlFor="email" className={`text-uppercase font-secular ${classes.labelField}`}>Email</label>
-                            <Field name="email" type="email" className={`form-control ${classes.field}`}/>
+                            <InputControl name="email" type="email" label="Email"
+                                          placeholder="Veuillez saisir votre adresse email"
+                                          errors={errors}
+                                          touched={touched}
+                            />
                         </div>
                         <div className="form-group mb-4">
-                            <label htmlFor="password" className={`text-uppercase font-secular ${classes.labelField}`}>Mot de passe</label>
-                            <Field name="password" type="password" className={`form-control ${classes.field}`}/>
+                            <InputControl name="password" type="password" label="Mot de passe"
+                                          placeholder="Veuillez saisir votre mot de passe"
+                                          errors={errors}
+                                          touched={touched}
+                            />
                         </div>
                         <div className="form-check mb-4">
                             <Field type="checkbox" name="checked" className="form-check-input"/>
-                            <label htmlFor="checked" className={`form-check-label ${classes.labelCheckbox}`}>Se souvenir ?</label>
+                            <label htmlFor="checked" className={`form-check-label ${classes.labelCheckbox}`}>Se souvenir
+                                ?</label>
                         </div>
-                        <Button className={`${classes.button} text-uppercase font-secular`}>Connexion</Button>
+                        <Button type="submit" className={`${classes.button} text-uppercase font-secular`}
+                                disabled={isSubmitting}>{!isSubmitting ? 'Connexion' :
+                            <Spinner animation="border" variant="light" size="sm"/>}</Button>
                     </Form>
                 )}
             </Formik>
@@ -40,28 +58,12 @@ function Login() {
 }
 
 const useStyles = createUseStyles({
-    field: {
-        color: '#fff',
-        backgroundColor: '#373636',
-        border: 'unset',
-        '&:focus': {
-            color: '#fff',
-            outline: '0px!important',
-            boxShadow: 'none!important',
-            backgroundColor: '#414040',
-            transition: 'backgroundcolor 2s ease-in-out'
-        }
-    },
-    labelField: {
-        fontSize: '1.5rem',
-        color: '#fff',
-    },
     button: {
         width: '100%',
         '&:focus': {
             outline: '0px!important',
-            boxShadow: 'none!important',
-        },
+            boxShadow: 'none!important'
+        }
     },
     checkbox: {
         backgroundColor: '#373636 !important',
@@ -75,8 +77,8 @@ const useStyles = createUseStyles({
     },
     labelCheckbox: {
         fontSize: '0.9rem',
-        color: '#fff',
-    },
+        color: '#fff'
+    }
 });
 
 export default Login;

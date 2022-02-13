@@ -13,8 +13,8 @@ function Games() {
     const [loader, setLoader] = useState(true);
 
     useEffect(() => {
-        const source = axios.CancelToken.source()
-        const getGames = async () => {
+        const source = axios.CancelToken.source();
+        (async () => {
             try {
                 const { data } = await axios.get('/games',{
                     cancelToken: source.token,
@@ -27,12 +27,9 @@ function Games() {
                     throw e
                 }
             }
-        };
-        getGames()
+        })();
 
-        return () => {
-            source.cancel()
-        }
+        return () => source.cancel();
     }, []);
 
     const container = {
