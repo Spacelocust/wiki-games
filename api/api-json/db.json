@@ -1,8 +1,9 @@
 {
   "users": [
     {
-      "email": "olivier@mail.com",
-      "password": "$2a$10$.Zoa1CI1pas/dCLQhtf1sudkqt4iEkYWPzwevwpDAmYL.9rPS/d4K",
+      "email": "lucas@test.fr",
+      "password": "$2a$10$AJevQxzblsk5qal8/BcFHugIvnRqk68dUksbio4fOGukcB3BnY6.e",
+      "username": "luc_ice",
       "id": 1
     }
   ]
