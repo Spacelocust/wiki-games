@@ -30,6 +30,7 @@ function InputControl({ name, type = 'text', label, placeholder, errors, touched
             cursor: 'pointer'
         },
         errors: {
+            margin: '0.5rem 0',
             fontSize: '.8rem!important'
         }
     }))();

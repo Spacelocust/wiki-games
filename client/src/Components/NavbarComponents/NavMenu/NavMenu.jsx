@@ -11,8 +11,8 @@ function NavMenu() {
     const [currentListGames, setCurrentListGames] = useRecoilState(listGames);
 
     useEffect(() => {
-        const source = axios.CancelToken.source()
-        const getGames = async () => {
+        const source = axios.CancelToken.source();
+        (async () => {
             try {
                 const { data } = await axios.get('/games',{
                     cancelToken: source.token,
@@ -26,12 +26,9 @@ function NavMenu() {
                     throw e
                 }
             }
-        };
-        getGames()
+        })();
 
-        return () => {
-            source.cancel()
-        }
+        return () => source.cancel()
     }, []);
 
     return (

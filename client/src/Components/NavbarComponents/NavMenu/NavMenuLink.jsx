@@ -8,7 +8,7 @@ import { FontAwesomeIcon as IconSetter } from "@fortawesome/react-fontawesome";
 function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
     const [open, setOpen] = useState(false);
 
-    const useStyles = createUseStyles({
+    const classes = (createUseStyles({
         container: {
             display: 'flex',
             justifyContent: 'space-between',
@@ -42,9 +42,7 @@ function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
             width: '1rem',
             marginRight: '0.5rem',
         }
-    });
-
-    const classes = useStyles();
+    }))();
 
     return (
         <>

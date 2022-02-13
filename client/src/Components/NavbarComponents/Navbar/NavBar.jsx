@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import Navbar from 'react-bootstrap/Navbar';
-import { faTrophy } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon as IconSetter } from "@fortawesome/react-fontawesome";
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
 
-import OffcanvasMenu from "../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu";
-import NavButton from "../../GeneralComponents/Buttons/NavButtonComponent/NavButton";
-import NavMenu from "../NavMenu/NavMenu";
-import NavButtonLabel from "../../GeneralComponents/Buttons/NavButtonComponent/NavButtonLabel";
-import Login from "../../AuthComponents/Auth/Login";
+import { signin, signout } from '../../AuthComponents/Selector/AuthSelector';
+import Login from '../../AuthComponents/Auth/Login';
+
+import NavMenu from '../NavMenu/NavMenu';
+import OffcanvasMenu from '../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu';
+import NavButton from '../../GeneralComponents/Buttons/NavButtonComponent/NavButton';
+import NavButtonLabel from '../../GeneralComponents/Buttons/NavButtonComponent/NavButtonLabel';
+import Profil from '../../ProfilComponents/Profil';
 
 function NavBar() {
+    const [user,_] = useRecoilState(signin(false));
+    const [, logout] = useRecoilState(signout);
+
     const [showMenu, setShowMenu] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
 
@@ -27,26 +34,36 @@ function NavBar() {
         onCloseMenu();
     };
 
+    const onLogout = () => {
+        logout({});
+    };
+
+    useEffect(() => {
+        user && onCloseLogin();
+    }, [user]);
+
     return (
         <>
             <Navbar bg="light" variant="light" fixed="top">
                 <NavButton showState={showMenu} onClick={onShowMenu}/>
-                <LinkContainer to='/'>
-                    <Navbar.Brand className='font-lemon'>
-                        <IconSetter icon={faTrophy} className='mx-2'/>
+                <LinkContainer to="/">
+                    <Navbar.Brand className="font-lemon">
+                        <IconSetter icon={faTrophy} className="mx-2"/>
                         WikiGames
                     </Navbar.Brand>
                 </LinkContainer>
-                <div className='d-flex justify-content-end w-100 h-100'>
-                    <NavButtonLabel label="s'inscrire" link='/register'/>
-                    <NavButtonLabel label="connexion" onClick={onShowLogin}/>
+                <div className="d-flex justify-content-end w-100 h-100">
+                    {!user ? <>
+                        <NavButtonLabel label="s'inscrire" link="/register"/>
+                        <NavButtonLabel label="connexion" onClick={onShowLogin}/>
+                    </> : <NavButton showState={showLogin} onClick={onShowLogin} label={user.username} />}
                 </div>
             </Navbar>
-            <OffcanvasMenu show={showLogin} closeCallback={onCloseLogin} position='end'>
-                <Login />
+            <OffcanvasMenu show={showLogin} closeCallback={onCloseLogin} position="end">
+                {!user ? <Login/> : <Profil />}
             </OffcanvasMenu>
             <OffcanvasMenu show={showMenu} closeCallback={onCloseMenu}>
-                <NavMenu />
+                <NavMenu/>
             </OffcanvasMenu>
         </>
     );

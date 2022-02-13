@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useRecoilState } from 'recoil';
 import { Formik, Form, Field } from 'formik';
+import { createUseStyles } from 'react-jss';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import { createUseStyles } from 'react-jss';
 
+import { signin } from '../Selector/AuthSelector';
 import InputControl from '../../GeneralComponents/Inputs/InputControl';
-import axios from 'axios';
 
 function Login() {
+    const [remember, setRemember] = useState(false);
+    const [, setUser] = useRecoilState(signin(remember));
     const classes = useStyles();
 
     return (
@@ -15,12 +19,14 @@ function Login() {
             <Formik
                 initialValues={{
                     email: '',
-                    password: ''
+                    password: '',
                 }}
                 onSubmit={async (formData, actions) => {
+                    const { email, password } = formData;
                     try {
-                        const { data } = await axios.post('/login', formData);
-                        console.log(data);
+                        const { data } = await axios.post('/signin', { email, password });
+                        const { accessToken, user } = data
+                        setUser({ ...user, accessToken });
                     } catch (e) {
                         actions.setFieldError('password', 'Erreur: Email ou mot de passe incorrect');
                     }
@@ -30,20 +36,20 @@ function Login() {
                     <Form onSubmit={handleSubmit}>
                         <div className="form-group mb-4">
                             <InputControl name="email" type="email" label="Email"
-                                          placeholder="Veuillez saisir votre adresse email"
+                                          placeholder="Votre adresse email"
                                           errors={errors}
                                           touched={touched}
                             />
                         </div>
                         <div className="form-group mb-4">
                             <InputControl name="password" type="password" label="Mot de passe"
-                                          placeholder="Veuillez saisir votre mot de passe"
+                                          placeholder="Votre mot de passe"
                                           errors={errors}
                                           touched={touched}
                             />
                         </div>
                         <div className="form-check mb-4">
-                            <Field type="checkbox" name="checked" className="form-check-input"/>
+                            <Field type="checkbox" name="checked" className="form-check-input" onInput={() => setRemember(!remember)}/>
                             <label htmlFor="checked" className={`form-check-label ${classes.labelCheckbox}`}>Se souvenir
                                 ?</label>
                         </div>
