@@ -5,6 +5,12 @@
       "password": "$2a$10$wO8m3vyq69z3z6VfaRyHou/r62QQ7vych31eom17yiv2rhK9Ve84O",
       "username": "luc_ice",
       "id": 1
+    },
+    {
+      "email": "test@test.fr",
+      "password": "$2a$10$kDU8CyuN1IjXQgTuC3njJueKVbrnf1UKW3yDR6zawY/eq6CUIQ5IO",
+      "username": "testeur",
+      "id": 2
     }
   ]
 }
