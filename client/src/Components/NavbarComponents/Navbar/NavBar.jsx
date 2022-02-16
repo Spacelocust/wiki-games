@@ -5,7 +5,7 @@ import LinkContainer from 'react-router-bootstrap/LinkContainer';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
 
-import { signin, signout } from '../../AuthComponents/Selector/AuthSelector';
+import { signin } from '../../AuthComponents/Selector/AuthSelector';
 import Login from '../../AuthComponents/Auth/Login';
 
 import NavMenu from '../NavMenu/NavMenu';
@@ -16,7 +16,6 @@ import Profil from '../../ProfilComponents/Profil';
 
 function NavBar() {
     const [user,_] = useRecoilState(signin(false));
-    const [, logout] = useRecoilState(signout);
 
     const [showMenu, setShowMenu] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
@@ -32,10 +31,6 @@ function NavBar() {
     const onShowLogin = () => {
         setShowLogin(!showLogin);
         onCloseMenu();
-    };
-
-    const onLogout = () => {
-        logout({});
     };
 
     useEffect(() => {

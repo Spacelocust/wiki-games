@@ -11,7 +11,7 @@ function Profil() {
             <h2 className="text-white">{user.username}</h2>
             <ul>
                 <NavMenuLink colorHover="#23a6d5" text="Profil"/>
-                <NavMenuLink colorHover="#23a6d5" text="Logout"/>
+                <NavMenuLink colorHover="#23a6d5" text="Logout" to="/logout"/>
             </ul>
         </div>
     );

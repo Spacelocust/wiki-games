@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import { createUseStyles } from 'react-jss';
 import { motion } from 'framer-motion';
-import axios from 'axios';
 
+import { signin } from '../Selector/AuthSelector';
 import ContainerComponent from '../../GeneralComponents/ContainerComponent/ContainerComponent';
 import BackButtonComponent from '../../GeneralComponents/Buttons/BackButtonComponent/BackButtonComponent';
 import InputControl from '../../GeneralComponents/Inputs/InputControl';
@@ -34,6 +37,8 @@ const RegisterSchema = Yup.object().shape({
 });
 
 function Register() {
+    const [user, setUser] = useRecoilState(signin(false));
+    const navigate = useNavigate();
     const classes = (createUseStyles({
         form: {
             width: '40%',
@@ -68,79 +73,85 @@ function Register() {
             }
         }
     };
+    useEffect(() => {
+        user && navigate('/', { replace: true });
+    }, [user]);
 
     return (
-        <ContainerComponent>
-            <motion.div
-                className="d-flex justify-content-center align-items-center h-100"
-                variants={container}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-            >
-                <Formik
-                    initialValues={{
-                        email: '',
-                        username: '',
-                        password: '',
-                        confirmPassword: ''
-                    }}
-                    validationSchema={RegisterSchema}
-                    onSubmit={async (formData, actions)=> {
-                        const {confirmPassword, ...rest} = formData;
-                        try {
-                            const { data } = await axios.post('/register', rest);
-                            console.log(data);
-                        } catch (e) {
-                            actions.setFieldError('email', 'Address email déjà utilisé');
-                        }
-                    }}
+        <>
+            {!user && <ContainerComponent>
+                <motion.div
+                    className="d-flex justify-content-center align-items-center h-100"
+                    variants={container}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
                 >
-                    {({ handleSubmit, errors, touched, isSubmitting }) => (<>
-                        <Form onSubmit={handleSubmit} className={classes.form}>
-                            <h2 className="d-flex flex-column mb-5">
-                                <span className="font-secular-uppercase text-medium">Inscrivez-vous sur</span>
-                                <span className="text-light font-lemon">WikiGames&#174;</span>
-                            </h2>
-                            <div className="form-group mb-4">
-                                <InputControl name="email" type="email" label="Email"
-                                              placeholder="Veuillez saisir une adresse email.."
-                                              errors={errors}
-                                              touched={touched} />
-                            </div>
-                            <div className="form-group mb-4">
-                                <InputControl name="username" label="Pseudonyme"
-                                              placeholder="Veuillez saisir un pseudonyme.." errors={errors}
-                                              touched={touched}/>
-                            </div>
-                            <div className="form-group mb-4">
-                                <InputControl name="password"
-                                              label="Mot de passe"
-                                              type="password"
-                                              placeholder="Veuillez saisir un mot de passe.." errors={errors}
-                                              touched={touched}/>
-                            </div>
-                            <div className="form-group mb-4">
-                                <InputControl name="confirmPassword"
-                                              type="password"
-                                              label="Confirmation de mot de passe"
-                                              placeholder="Veuillez confirmer le mot de passe.."
-                                              errors={errors}
-                                              touched={touched}/>
-                            </div>
-                            <BackButtonComponent/>
-                            <Button
-                                type="submit"
-                                className={`font-secular-uppercase text-medium ${classes.button}`}
-                                disabled={isSubmitting}>
-                                {!isSubmitting ? 'Inscription' :
-                                    <Spinner animation="border" variant="light" size="sm"/>}
-                            </Button>
-                        </Form>
-                    </>)}
-                </Formik>
-            </motion.div>
-        </ContainerComponent>
+                    <Formik
+                        initialValues={{
+                            email: '',
+                            username: '',
+                            password: '',
+                            confirmPassword: ''
+                        }}
+                        validationSchema={RegisterSchema}
+                        onSubmit={async (formData, actions) => {
+                            const { confirmPassword, ...rest } = formData;
+                            try {
+                                const { data } = await axios.post('/register', rest);
+                                const { accessToken, user } = data
+                                setUser({ ...user, accessToken });
+                            } catch (e) {
+                                actions.setFieldError('email', 'Address email déjà utilisé');
+                            }
+                        }}
+                    >
+                        {({ handleSubmit, errors, touched, isSubmitting }) => (<>
+                            <Form onSubmit={handleSubmit} className={classes.form}>
+                                <h2 className="d-flex flex-column mb-5">
+                                    <span className="font-secular-uppercase text-medium">Inscrivez-vous sur</span>
+                                    <span className="text-light font-lemon">WikiGames&#174;</span>
+                                </h2>
+                                <div className="form-group mb-4">
+                                    <InputControl name="email" type="email" label="Email"
+                                                  placeholder="Veuillez saisir une adresse email.."
+                                                  errors={errors}
+                                                  touched={touched}/>
+                                </div>
+                                <div className="form-group mb-4">
+                                    <InputControl name="username" label="Pseudonyme"
+                                                  placeholder="Veuillez saisir un pseudonyme.." errors={errors}
+                                                  touched={touched}/>
+                                </div>
+                                <div className="form-group mb-4">
+                                    <InputControl name="password"
+                                                  label="Mot de passe"
+                                                  type="password"
+                                                  placeholder="Veuillez saisir un mot de passe.." errors={errors}
+                                                  touched={touched}/>
+                                </div>
+                                <div className="form-group mb-4">
+                                    <InputControl name="confirmPassword"
+                                                  type="password"
+                                                  label="Confirmation de mot de passe"
+                                                  placeholder="Veuillez confirmer le mot de passe.."
+                                                  errors={errors}
+                                                  touched={touched}/>
+                                </div>
+                                <BackButtonComponent/>
+                                <Button
+                                    type="submit"
+                                    className={`font-secular-uppercase text-medium ${classes.button}`}
+                                    disabled={isSubmitting}>
+                                    {!isSubmitting ? 'Inscription' :
+                                        <Spinner animation="border" variant="light" size="sm"/>}
+                                </Button>
+                            </Form>
+                        </>)}
+                    </Formik>
+                </motion.div>
+            </ContainerComponent>}
+        </>
     );
 }
 
