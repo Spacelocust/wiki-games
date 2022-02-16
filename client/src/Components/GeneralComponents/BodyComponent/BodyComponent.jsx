@@ -7,7 +7,7 @@ class BodyComponent extends React.Component {
 
     render() {
         return (
-            <div style={{ height: 'fit-content', width: '100%', marginTop: '1rem' }}>
+            <div style={{ height: 'fit-content', width: '100%', margin: '1rem 0' }}>
                 {this.props.children}
             </div>
         );

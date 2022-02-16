@@ -70,11 +70,10 @@ function Game() {
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="bg-white rounded"
+                        className="bg-dark text-light rounded p-1"
                     >
-                        { !isEmpty(game) ?
-                            <Leagues leagues={leagues} searchCallback={searchLeagues}/>
-                            : <LoaderGif img={overwatch} text="unset"/>}
+                        <h2 className="font-secular m-2">Matchs</h2>
+                        <GameMatches />
                     </motion.div>
                 </BodyComponent>
                 <BodyComponent>
@@ -83,10 +82,11 @@ function Game() {
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="bg-dark text-light rounded"
+                        className="bg-white rounded"
                     >
-                        <h2 className="font-secular m-2">Matchs</h2>
-                        <GameMatches />
+                        { !isEmpty(game) ?
+                            <Leagues leagues={leagues} searchCallback={searchLeagues}/>
+                            : <LoaderGif img={overwatch} text="unset"/>}
                     </motion.div>
                 </BodyComponent>
             </div>

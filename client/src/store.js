@@ -4,8 +4,8 @@ const store = atom({
     key: 'store',
     default: {
         user: {},
-        games: [],
-        leagues: [],
+        games: 'games',
+        leagues: 'leagues',
         teams: [],
     }
 })

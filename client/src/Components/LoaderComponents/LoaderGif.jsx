@@ -22,7 +22,7 @@ function LoaderGif({ img = teemo, text = `Teemo attend dans l'ombre..` }) {
             initial="hidden"
             animate={'visible'}
         >
-            <img src={img} alt="loading..." style={{ width: '10rem', height: '10rem' }}/>
+            <img src={img} alt="loading..." style={{ height: '10rem' }}/>
             {text !== 'unset' && <p className="text-light font-medium font-secular">{text}</p>}
         </motion.div>
     );
