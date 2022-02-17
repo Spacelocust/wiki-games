@@ -1,0 +1,36 @@
+.component {
+  &-pagination {
+    display: flex;
+    align-items: center;
+    &-page {
+      &-link {
+        position: relative;
+        display: block;
+        padding: .5rem .75rem;
+        margin: 0 0.1rem;
+        line-height: 1.25;
+        background-color: #b39c42;
+        border: 1px solid #b39c42;
+        border-radius: 2rem;
+        color: #fff;
+        &:hover {
+          color: #fff;
+          border: 1px solid #887733;
+          background-color: #887733;
+          transition: background-color 0.1s ease-in-out;
+        }
+      }
+      &-active {
+        background-color: #ffffff;
+        color: #b39c42;
+        border: 1px solid #b39c42;
+        &:hover {
+          color: #fff;
+          border: 1px solid #887733;
+          background-color: #887733;
+          transition: background-color 0.1s ease-in-out;
+        }
+      }
+    }
+  }
+}

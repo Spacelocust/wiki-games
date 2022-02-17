@@ -3,8 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Lemon&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
 
-@import './Components/NavbarComponents/Navbar/NavBar';
-@import 'Components/GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu.scss';
+@import './Components/NavbarComponents/Navbar/NavBar.scss';
+@import './Components/GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu.scss';
+@import './Components/GeneralComponents/PaginationComponent/PaginationComponent.scss';
 
 * {
   margin: 0;
