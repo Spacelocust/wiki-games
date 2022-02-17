@@ -1,5 +1,7 @@
 import api from '../axiosBase.js';
 import { IMG_GAMES } from '../constant.js';
+import parser from 'parse-link-header';
+
 
 export const getGames = async (req, res) => {
     try {
@@ -45,12 +47,13 @@ export const getGameMatches = async (req, res) => {
 export const  getGamePastMatches = async (req, res) => {
     const { id, page, per_page } = req.params;
     try {
-        const { data } = await api.get(`/matches/past/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
+        const { data, headers } = await api.get(`/matches/past/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
         res.set({
             'Content-Type': 'application/json',
             'Cache-Control': 'max-age: 60'
         });
-        res.send(data);
+        const link = parser(headers.link)
+        res.send({ list: data, link });
     } catch (e) {
         res.status(500).send(e);
     }
@@ -59,12 +62,13 @@ export const  getGamePastMatches = async (req, res) => {
 export const getGameRunningMatches = async (req, res) => {
     const { id, page, per_page } = req.params;
     try {
-        const { data } = await api.get(`/matches/running/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
+        const { data, headers } = await api.get(`/matches/running/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
         res.set({
             'Content-Type': 'application/json',
             'Cache-Control': 'max-age: 60'
         });
-        res.send(data);
+        const link = parser(headers.link)
+        res.send({ list: data, link });
     } catch (e) {
         res.status(500).send(e);
     }
@@ -73,12 +77,13 @@ export const getGameRunningMatches = async (req, res) => {
 export const getGameUpcommingMatches = async (req, res) => {
     const { id, page, per_page } = req.params;
     try {
-        const { data } = await api.get(`/matches/upcoming/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
+        const { data, headers } = await api.get(`/matches/upcoming/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
         res.set({
             'Content-Type': 'application/json',
-            'Cache-Control': 'max-age: 60'
+            'Cache-Control': 'max-age: 60',
         });
-        res.send(data);
+        const link = parser(headers.link);
+        res.send({ list: data, link });
     } catch (e) {
         res.status(500).send(e);
     }
