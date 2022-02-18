@@ -10,7 +10,7 @@ function GameMatche({ matche }) {
                 <img src={matche.opponents[0].opponent.image_url} alt="" style={{ height: '3rem', width: '3rem' }}/>
                 <p className="text-center m-0">{matche.opponents[0].opponent.name}</p>
             </div>
-            <CharmSwords height='3rem'/>
+            <CharmSwords height={'48px'} />
             <div className="d-flex align-items-center flex-column">
                 <img src={matche.opponents[0].opponent.image_url} alt="" style={{ height: '3rem', width: '3rem' }}/>
                 <p className="text-center m-0">{matche.opponents[0].opponent.name}</p>
