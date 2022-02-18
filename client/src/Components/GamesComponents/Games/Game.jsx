@@ -11,7 +11,7 @@ import overwatch from '../../../assets/images/overwatch.gif';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import BackButtonComponent from '../../GeneralComponents/Buttons/BackButtonComponent/BackButtonComponent';
 import Leagues from '../../LeaguesComponents/GameLeagues/Leagues';
-import GameMatches from '../../MatchComponent/GameMatches/GameMatches';
+import GameMatchs from '../../MatchComponent/GameMatchs/GameMatchs';
 
 function Game() {
     const params = useParams();
@@ -73,7 +73,7 @@ function Game() {
                         className="bg-dark text-light rounded p-1"
                     >
                         <h2 className="font-secular m-2">Matchs</h2>
-                        <GameMatches />
+                        <GameMatchs />
                     </motion.div>
                 </BodyComponent>
                 <BodyComponent>

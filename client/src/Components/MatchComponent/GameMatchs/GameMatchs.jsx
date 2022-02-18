@@ -4,16 +4,16 @@ import { useParams } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { isEmpty, isNull } from 'lodash';
 
-import GameMatche from './GameMatche';
+import GameMatch from './GameMatch';
 import PaginationComponent from '../../GeneralComponents/PaginationComponent/PaginationComponent';
 import ButtonCustom from '../../GeneralComponents/Buttons/Button/ButtonCustom';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gun-valorant.gif';
 
-function GameMatches() {
+function GameMatchs() {
     const params = useParams();
     const [pagination, setPagination] = useState({ state: 'upcoming', page: 1, perPage: 5, maxPage: 0 });
-    const [matches, setMatches] = useState([]);
+    const [matchs, setMatchs] = useState([]);
     const [loader, setLoader] = useState(true);
 
     const changeState = (state) => setPagination({ ...pagination, state, page: 1 });
@@ -24,15 +24,17 @@ function GameMatches() {
         const source = axios.CancelToken.source();
         (async () => {
             setLoader(true);
-            console.log(`/games/${params.id}/matches/${pagination.state}/${pagination.page}/${pagination.perPage}`)
             try {
-                const { data } = await axios.get(`/games/${params.id}/matches/${pagination.state}/${pagination.page}/${pagination.perPage}`, {
+                const { data } = await axios.get(`/games/${params.id}/matchs/${pagination.state}/${pagination.page}/${pagination.perPage}`, {
                     cancelToken: source.token
                 });
                 const { list, link } = data;
 
-                setPagination({ ...pagination, maxPage: (!isNull(link) ? parseInt(link.last.page) : 0) });
-                setMatches(list);
+                setPagination({
+                    ...pagination,
+                    maxPage: (!isNull(link) ? parseInt(link.last !== undefined ? parseInt(link.last.page) : parseInt(link.prev.page) + 1) : 0)
+                });
+                setMatchs(list);
                 setLoader(false);
             } catch (e) {
                 if (axios.isCancel(e)) {
@@ -55,18 +57,18 @@ function GameMatches() {
                               active={pagination.state === 'upcoming'}>Prochains matches</ButtonCustom>
             </div>
             <ListGroup className="m-2">
-                {(matches && !loader) ?
-                    (!isEmpty(matches) ? matches.map((matche) => <ListGroup.Item key={matche.id}><GameMatche
-                            matche={matche}/></ListGroup.Item>)
+                {(matchs && !loader) ?
+                    (!isEmpty(matchs) ? matchs.map((match) => <ListGroup.Item key={match.id}><GameMatch
+                            match={match}/></ListGroup.Item>)
                         : <ListGroup.Item><p className="m-0 text-center">Aucun matches..</p></ListGroup.Item>)
                     : <ListGroup.Item><LoaderGif img={gun} text="unset"/></ListGroup.Item>
                 }
             </ListGroup>
-            {(!isEmpty(matches) && pagination.maxPage > 0) &&
+            {(!isEmpty(matchs) && pagination.maxPage > 0) &&
                 <PaginationComponent className="justify-content-center" onPageChange={pageChange}
                                      pageCount={pagination.maxPage} forcePage={(pagination.page - 1)}/>}
         </div>
     );
 }
 
-export default GameMatches;
+export default GameMatchs;

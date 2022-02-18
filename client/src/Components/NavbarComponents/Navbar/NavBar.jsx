@@ -4,11 +4,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
+import { LucideCoins } from '../../GeneralComponents/SvgComponents/SvgComponent';
 
 import { signin } from '../../AuthComponents/Selector/AuthSelector';
 import Login from '../../AuthComponents/Auth/Login';
 
 import NavMenu from '../NavMenu/NavMenu';
+import NavMenuAuth from '../NavMenu/NavMenuAuth';
 import OffcanvasMenu from '../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu';
 import NavButton from '../../GeneralComponents/Buttons/NavButtonComponent/NavButton';
 import NavButtonLabel from '../../GeneralComponents/Buttons/NavButtonComponent/NavButtonLabel';
@@ -51,7 +53,7 @@ function NavBar() {
                     {!user ? <>
                         <NavButtonLabel label="s'inscrire" link="/register"/>
                         <NavButtonLabel label="connexion" onClick={onShowLogin}/>
-                    </> : <NavButton showState={showLogin} onClick={onShowLogin} label={user.username} />}
+                    </> : <NavMenuAuth showState={showLogin} onClick={onShowLogin} user={user}><LucideCoins height='24px' style={{ paddingLeft: '1.5rem'}}/></NavMenuAuth>}
                 </div>
             </Navbar>
             <OffcanvasMenu show={showLogin} closeCallback={onCloseLogin} position="end">

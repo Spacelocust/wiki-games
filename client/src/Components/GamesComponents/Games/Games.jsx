@@ -60,7 +60,7 @@ function Games() {
                 exit="exit"
             >
                 {currentListGames && [...currentListGames].reverse().map((game) => (
-                    <Card key={game.id} url={game.img_url} name={game.name} id={game.id}/>
+                    <Card key={game.name} url={game.img_url} name={game.name} id={game.id}/>
                 ))}
             </motion.div> : <LoaderGif/>}
         </ContainerComponent>
