@@ -17,7 +17,7 @@ import NavButtonLabel from '../../GeneralComponents/Buttons/NavButtonComponent/N
 import Profil from '../../ProfilComponents/Profil';
 
 function NavBar() {
-    const [user,_] = useRecoilState(signin(false));
+    const [user, _] = useRecoilState(signin(false));
 
     const [showMenu, setShowMenu] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
@@ -51,13 +51,16 @@ function NavBar() {
                 </LinkContainer>
                 <div className="d-flex justify-content-end w-100 h-100">
                     {!user ? <>
-                        <NavButtonLabel label="s'inscrire" link="/register"/>
-                        <NavButtonLabel label="connexion" onClick={onShowLogin}/>
-                    </> : <NavMenuAuth showState={showLogin} onClick={onShowLogin} user={user}><LucideCoins height='24px' style={{ paddingLeft: '1.5rem'}}/></NavMenuAuth>}
+                            <NavButtonLabel label="s'inscrire" link="/register"/>
+                            <NavButtonLabel label="connexion" onClick={onShowLogin}/>
+                        </> :
+                        <NavMenuAuth showState={showLogin} onClick={onShowLogin} user={user}>
+                            <LucideCoins height="24px" style={{ paddingLeft: '1.5rem' }}/>
+                        </NavMenuAuth>}
                 </div>
             </Navbar>
             <OffcanvasMenu show={showLogin} closeCallback={onCloseLogin} position="end">
-                {!user ? <Login/> : <Profil />}
+                {!user ? <Login/> : <Profil/>}
             </OffcanvasMenu>
             <OffcanvasMenu show={showMenu} closeCallback={onCloseMenu}>
                 <NavMenu/>

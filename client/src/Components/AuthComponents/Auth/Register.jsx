@@ -98,7 +98,7 @@ function Register() {
                         onSubmit={async (formData, actions) => {
                             const { confirmPassword, ...rest } = formData;
                             try {
-                                const { data } = await axios.post('/register', rest);
+                                const { data } = await axios.post('/register', { ...rest, coins: 100 });
                                 const { accessToken, user } = data
                                 setUser({ ...user, accessToken });
                             } catch (e) {
