@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { isEmpty } from 'lodash';
 import Navbar from 'react-bootstrap/Navbar';
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
-import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
-import { LucideCoins } from '../../GeneralComponents/SvgComponents/SvgComponent';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
-import { signin } from '../../AuthComponents/Selector/AuthSelector';
+
+import { AuthReducer } from '../../AuthComponents/Selector/AuthSelector';
+import ACTION from '../../AuthComponents/Selector/AuthAction';
+
+import Profil from '../../ProfilComponents/Profil';
 import Login from '../../AuthComponents/Auth/Login';
-
 import NavMenu from '../NavMenu/NavMenu';
 import NavMenuAuth from '../NavMenu/NavMenuAuth';
 import OffcanvasMenu from '../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu';
 import NavButton from '../../GeneralComponents/Buttons/NavButtonComponent/NavButton';
 import NavButtonLabel from '../../GeneralComponents/Buttons/NavButtonComponent/NavButtonLabel';
-import Profil from '../../ProfilComponents/Profil';
+import { LucideCoins } from '../../GeneralComponents/SvgComponents/SvgComponent';
 
 function NavBar() {
-    const [user, _] = useRecoilState(signin(false));
+    const [user] = AuthReducer(ACTION.user);
 
     const [showMenu, setShowMenu] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
@@ -50,7 +52,7 @@ function NavBar() {
                     </Navbar.Brand>
                 </LinkContainer>
                 <div className="d-flex justify-content-end w-100 h-100">
-                    {!user ? <>
+                    {isEmpty(user) ? <>
                             <NavButtonLabel label="s'inscrire" link="/register"/>
                             <NavButtonLabel label="connexion" onClick={onShowLogin}/>
                         </> :
@@ -60,7 +62,7 @@ function NavBar() {
                 </div>
             </Navbar>
             <OffcanvasMenu show={showLogin} closeCallback={onCloseLogin} position="end">
-                {!user ? <Login/> : <Profil/>}
+                {isEmpty(user) ? <Login/> : <Profil/>}
             </OffcanvasMenu>
             <OffcanvasMenu show={showMenu} closeCallback={onCloseMenu}>
                 <NavMenu/>

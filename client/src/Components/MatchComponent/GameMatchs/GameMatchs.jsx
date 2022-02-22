@@ -5,21 +5,23 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { isEmpty, isNull } from 'lodash';
 
 import GameMatch from './GameMatch';
+import OffcanvasMenu from '../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu';
 import PaginationComponent from '../../GeneralComponents/PaginationComponent/PaginationComponent';
 import ButtonCustom from '../../GeneralComponents/Buttons/Button/ButtonCustom';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gun-valorant.gif';
+import MatchParis from '../matchParis/MatchParis';
 
 function GameMatchs() {
     const params = useParams();
     const [pagination, setPagination] = useState({ state: 'upcoming', page: 1, perPage: 5, maxPage: 0 });
     const [matchs, setMatchs] = useState([]);
     const [loader, setLoader] = useState(true);
+    const [paris, setParis] = useState(false);
+    const [matchSelected, setMatchSelected] = useState({});
 
     const changeState = (state) => setPagination({ ...pagination, state, page: 1 });
-
     const pageChange = ({ selected }) => setPagination({ ...pagination, page: selected + 1 });
-
     useEffect(() => {
         const source = axios.CancelToken.source();
         (async () => {
@@ -46,6 +48,11 @@ function GameMatchs() {
         return () => source.cancel();
     }, [pagination.page, pagination.state]);
 
+    const changeMatchSelected = (match) => {
+        setParis(true);
+        setMatchSelected(match);
+    };
+
     return (
         <div className="container">
             <div>
@@ -58,8 +65,9 @@ function GameMatchs() {
             </div>
             <ListGroup className="m-2">
                 {(matchs && !loader) ?
-                    (!isEmpty(matchs) ? matchs.map((match) => <ListGroup.Item key={match.id}><GameMatch
-                            match={match}/></ListGroup.Item>)
+                    (!isEmpty(matchs) ? matchs.map((match) => <ListGroup.Item key={match.id}>
+                            <GameMatch match={match} callback={changeMatchSelected}/>
+                        </ListGroup.Item>)
                         : <ListGroup.Item><p className="m-0 text-center">Aucun matches..</p></ListGroup.Item>)
                     : <ListGroup.Item><LoaderGif img={gun} text="unset"/></ListGroup.Item>
                 }
@@ -67,6 +75,12 @@ function GameMatchs() {
             {(!isEmpty(matchs) && pagination.maxPage > 0) &&
                 <PaginationComponent className="justify-content-center" onPageChange={pageChange}
                                      pageCount={pagination.maxPage} forcePage={(pagination.page - 1)}/>}
+            <OffcanvasMenu variants="#fff" closeCallback={() => setParis(!paris)} position={'end'} show={paris}>
+                {matchSelected && <div>
+                    <p>{matchSelected.name}</p>
+                    <MatchParis />
+                </div>}
+            </OffcanvasMenu>
         </div>
     );
 }

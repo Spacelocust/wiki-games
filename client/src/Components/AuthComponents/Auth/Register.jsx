@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { isEmpty } from 'lodash';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
@@ -9,7 +9,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import { createUseStyles } from 'react-jss';
 import { motion } from 'framer-motion';
 
-import { signin } from '../Selector/AuthSelector';
+import { AuthReducer } from '../Selector/AuthSelector';
+import ACTION from '../Selector/AuthAction';
 import ContainerComponent from '../../GeneralComponents/ContainerComponent/ContainerComponent';
 import BackButtonComponent from '../../GeneralComponents/Buttons/BackButtonComponent/BackButtonComponent';
 import InputControl from '../../GeneralComponents/Inputs/InputControl';
@@ -37,7 +38,7 @@ const RegisterSchema = Yup.object().shape({
 });
 
 function Register() {
-    const [user, setUser] = useRecoilState(signin(false));
+    const [user, setUser] = AuthReducer(ACTION.signup);
     const navigate = useNavigate();
     const classes = (createUseStyles({
         form: {
@@ -74,12 +75,12 @@ function Register() {
         }
     };
     useEffect(() => {
-        user && navigate('/', { replace: true });
+        !isEmpty(user) && navigate('/', { replace: true });
     }, [user]);
 
     return (
         <>
-            {!user && <ContainerComponent>
+            {isEmpty(user) && <ContainerComponent>
                 <motion.div
                     className="d-flex justify-content-center align-items-center h-100"
                     variants={container}
@@ -98,11 +99,10 @@ function Register() {
                         onSubmit={async (formData, actions) => {
                             const { confirmPassword, ...rest } = formData;
                             try {
-                                const { data } = await axios.post('/register', { ...rest, coins: 100 });
-                                const { accessToken, user } = data
-                                setUser({ ...user, accessToken });
+                                const { data } = await axios.post('/users/signup', rest);
+                                setUser({ ...data });
                             } catch (e) {
-                                actions.setFieldError('email', 'Address email déjà utilisé');
+                                actions.setFieldError('email', e.response.data.message);
                             }
                         }}
                     >

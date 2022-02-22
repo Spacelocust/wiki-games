@@ -1,7 +1,8 @@
 const ACTION = {
-    LOGOUT: 'logout',
-    LOGIN: 'login',
-    REGISTER: 'register',
+    signout: 'signout',
+    signin: 'signin',
+    signup: 'signup',
+    user: 'user',
 }
 
 export default ACTION;

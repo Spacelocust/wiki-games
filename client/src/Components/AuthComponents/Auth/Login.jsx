@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
 import { Formik, Form, Field } from 'formik';
 import { createUseStyles } from 'react-jss';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
-import { signin } from '../Selector/AuthSelector';
+import { AuthReducer } from '../Selector/AuthSelector';
+import ACTION from '../Selector/AuthAction';
 import InputControl from '../../GeneralComponents/Inputs/InputControl';
 
 function Login() {
     const [remember, setRemember] = useState(false);
-    const [, setUser] = useRecoilState(signin(remember));
+    const [setUser] = AuthReducer(ACTION.signup, remember);
     const classes = useStyles();
 
     return (
@@ -24,9 +24,8 @@ function Login() {
                 onSubmit={async (formData, actions) => {
                     const { email, password } = formData;
                     try {
-                        const { data } = await axios.post('/signin', { email, password });
-                        const { accessToken, user } = data
-                        setUser({ ...user, accessToken });
+                        const { data } = await axios.post('/users/signin', { email, password });
+                        setUser({ ...data });
                     } catch (e) {
                         actions.setFieldError('password', 'Erreur: Email ou mot de passe incorrect');
                     }
@@ -50,12 +49,12 @@ function Login() {
                         </div>
                         <div className="form-check mb-4">
                             <Field type="checkbox" name="checked" className="form-check-input" onInput={() => setRemember(!remember)}/>
-                            <label htmlFor="checked" className={`form-check-label ${classes.labelCheckbox}`}>Se souvenir
-                                ?</label>
+                            <label htmlFor="checked" className={`form-check-label ${classes.labelCheckbox}`}>Se souvenir ?</label>
                         </div>
-                        <Button type="submit" className={`${classes.button} text-uppercase font-secular`}
-                                disabled={isSubmitting}>{!isSubmitting ? 'Connexion' :
-                            <Spinner animation="border" variant="light" size="sm"/>}</Button>
+                        <Button type="submit" className={`${classes.button} text-uppercase font-secular`} disabled={isSubmitting}>
+                            {!isSubmitting ? 'Connexion' :
+                            <Spinner animation="border" variant="light" size="sm"/>}
+                        </Button>
                     </Form>
                 )}
             </Formik>

@@ -19,7 +19,7 @@ function BadgeComponent({ className, children, variants = '#7952b3', position = 
     }))();
 
     return (
-        <div className={`d-flex justify-content-${position}`}>
+        <div className={`d-flex justify-content-${position} align-items-center`}>
             <span className={`${className} ${classes.badge}`} onClick={() => onClick()}>{children}</span>
         </div>
     );
