@@ -1,35 +1,30 @@
 import express from 'express';
-import jsonServer from 'json-server';
-import auth from 'json-server-auth';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
 import gamesRoutes from './routes/games.js';
+import authRoutes from './routes/auth.js';
 
-const router = jsonServer.router('api-json/db.json');
 const app = express();
+
 dotenv.config();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(
     cors({
-        origin: true,
+        origin: 'http://localhost:3000',
         credentials: true,
         preflightContinue: false,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        methods: 'GET,PUT,POST,DELETE',
     })
 );
 
-app.db = router.db;
-
-//Middleware auth
-app.use(auth);
-
-app.use(jsonServer.bodyParser);
+app.options('*', cors());
 
 //Custom route
 app.use('/api', gamesRoutes);
-app.use('/api', router);
-app.use('/api', jsonServer.rewriter('api-json/routes.json'));
+app.use('/api', authRoutes);
 
 app.listen(5000, () => {
     console.log('server running');
