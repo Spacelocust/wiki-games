@@ -8,19 +8,17 @@ import authRoutes from './routes/auth.js';
 const app = express();
 
 dotenv.config();
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: "*",
         credentials: true,
         preflightContinue: false,
-        methods: 'GET,PUT,POST,DELETE',
+        maxAge: 600,
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     })
 );
-
-app.options('*', cors());
 
 //Custom route
 app.use('/api', gamesRoutes);

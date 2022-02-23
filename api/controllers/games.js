@@ -44,6 +44,20 @@ export const getGameMatches = async (req, res) => {
     }
 };
 
+//TODO request matchsBet with check coins user and valid matchBet
+export const setMatchsBet = async (req, res) => {
+    try {
+        const { data } = await api.get(`/matches?filter[videogame]=${req.params.id}`);
+        res.set({
+            'Content-Type': 'application/json',
+            'Cache-Control': 'max-age: 60'
+        });
+        res.send(data);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+};
+
 export const  getGamePastMatches = async (req, res) => {
     const { id, page, per_page } = req.params;
     try {
