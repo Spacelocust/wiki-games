@@ -1,8 +1,8 @@
 import React from 'react';
 import FigureImage from "react-bootstrap/FigureImage";
-import Load from '../../GamesComponents/Games/load';
+import Load from '../../../GamesComponents/Games/load';
 
-class HeaderComponent extends React.Component {
+class Header extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -28,4 +28,4 @@ class HeaderComponent extends React.Component {
     }
 }
 
-export default HeaderComponent;
+export default Header;

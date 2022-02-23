@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API from '../../../api/axiosBase';
 import { useParams } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { isEmpty, isNull } from 'lodash';
 
 import GameMatch from './GameMatch';
-import OffcanvasMenu from '../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu';
-import PaginationComponent from '../../GeneralComponents/PaginationComponent/PaginationComponent';
+import MatchBet from '../matchBet/MatchBet';
+import OffcanvasMenu from '../../GeneralComponents/SlideMenu/OffcanvasMenu';
+import PaginationComponent from '../../GeneralComponents/Pagination/PaginationComponent';
 import ButtonCustom from '../../GeneralComponents/Buttons/Button/ButtonCustom';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gun-valorant.gif';
-import MatchParis from '../matchParis/MatchParis';
 
 function GameMatchs() {
     const params = useParams();
-    const [pagination, setPagination] = useState({ state: 'upcoming', page: 1, perPage: 5, maxPage: 0 });
-    const [matchs, setMatchs] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [paris, setParis] = useState(false);
+    const [pagination, setPagination] = useState({ state: 'upcoming', page: 1, perPage: 5, maxPage: 0 });
+
+    const [matchs, setMatchs] = useState([]);
     const [matchSelected, setMatchSelected] = useState({});
+
+    const [bet, setBet] = useState(false);
 
     const changeState = (state) => setPagination({ ...pagination, state, page: 1 });
     const pageChange = ({ selected }) => setPagination({ ...pagination, page: selected + 1 });
@@ -27,7 +30,7 @@ function GameMatchs() {
         (async () => {
             setLoader(true);
             try {
-                const { data } = await axios.get(`/games/${params.id}/matchs/${pagination.state}/${pagination.page}/${pagination.perPage}`, {
+                const { data } = await API.get(`/games/${params.id}/matchs/${pagination.state}/${pagination.page}/${pagination.perPage}`, {
                     cancelToken: source.token
                 });
                 const { list, link } = data;
@@ -49,7 +52,7 @@ function GameMatchs() {
     }, [pagination.page, pagination.state]);
 
     const changeMatchSelected = (match) => {
-        setParis(true);
+        setBet(true);
         setMatchSelected(match);
     };
 
@@ -75,10 +78,10 @@ function GameMatchs() {
             {(!isEmpty(matchs) && pagination.maxPage > 0) &&
                 <PaginationComponent className="justify-content-center" onPageChange={pageChange}
                                      pageCount={pagination.maxPage} forcePage={(pagination.page - 1)}/>}
-            <OffcanvasMenu variants="#fff" closeCallback={() => setParis(!paris)} position={'end'} show={paris}>
+            <OffcanvasMenu variants="#fff" closeCallback={() => setBet(!bet)} position={'end'} show={bet}>
                 {matchSelected && <div>
                     <p>{matchSelected.name}</p>
-                    <MatchParis />
+                    <MatchBet match={matchSelected} />
                 </div>}
             </OffcanvasMenu>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import API from '../../../api/axiosBase';
 import { Formik, Form, Field } from 'formik';
 import { createUseStyles } from 'react-jss';
 import Button from 'react-bootstrap/Button';
@@ -11,7 +11,7 @@ import InputControl from '../../GeneralComponents/Inputs/InputControl';
 
 function Login() {
     const [remember, setRemember] = useState(false);
-    const [setUser] = AuthReducer(ACTION.signup, remember);
+    const [setUser] = AuthReducer(ACTION.signin, remember);
     const classes = useStyles();
 
     return (
@@ -24,7 +24,7 @@ function Login() {
                 onSubmit={async (formData, actions) => {
                     const { email, password } = formData;
                     try {
-                        const { data } = await axios.post('/users/signin', { email, password });
+                        const { data } = await API.post('/users/signin', { email, password });
                         setUser({ ...data });
                     } catch (e) {
                         actions.setFieldError('password', 'Erreur: Email ou mot de passe incorrect');

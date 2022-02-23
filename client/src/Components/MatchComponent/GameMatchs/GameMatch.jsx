@@ -4,7 +4,7 @@ import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 
 import empty from '../../../assets/images/img-empty.jpg';
-import { CharmSwords, LucideCoins } from '../../GeneralComponents/SvgComponents/SvgComponent';
+import { CharmSwords, LucideCoins } from '../../GeneralComponents/SvgComponent/SvgComponent';
 import BadgeComponent from '../../GeneralComponents/Badges/BadgeComponent';
 import Button from 'react-bootstrap/Button';
 
@@ -45,9 +45,10 @@ function GameMatch({ match, callback }) {
                     <p className="text-center m-0">{match.opponents[1].opponent.name}</p>
                 </div>
             </div>
-            <div  className="d-flex justify-content-end">
-                <Button variant='success' title="Paris" onClick={() => callback(match)}>Parié <LucideCoins height="18px" /></Button>
-            </div>
+            {!(status === 'terminé' || status === 'annulé') && <div className="d-flex justify-content-end">
+                <Button variant="success" title="Paris" onClick={() => callback(match)}>Parié <LucideCoins
+                    height="18px"/></Button>
+            </div>}
             <Collapse in={more}>
             <div>test..</div>
             </Collapse>

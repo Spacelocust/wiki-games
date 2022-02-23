@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
-import Home from "../Components/HomeComponents/Home";
+import Home from "../Components/HomeComponent/Home";
 import Games from "../Components/GamesComponents/Games/Games";
 import Game from "../Components/GamesComponents/Games/Game";
 import Register from "../Components/AuthComponents/Auth/Register";

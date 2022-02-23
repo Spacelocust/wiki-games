@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../../../api/axiosBase';
 import { isEmpty } from 'lodash';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -11,8 +11,8 @@ import { motion } from 'framer-motion';
 
 import { AuthReducer } from '../Selector/AuthSelector';
 import ACTION from '../Selector/AuthAction';
-import ContainerComponent from '../../GeneralComponents/ContainerComponent/ContainerComponent';
-import BackButtonComponent from '../../GeneralComponents/Buttons/BackButtonComponent/BackButtonComponent';
+import ContainerComponent from '../../GeneralComponents/Containers/ContainerComponent/ContainerComponent';
+import BackButtonComponent from '../../GeneralComponents/Buttons/BackButton/BackButtonComponent';
 import InputControl from '../../GeneralComponents/Inputs/InputControl';
 
 const RegisterSchema = Yup.object().shape({
@@ -99,7 +99,7 @@ function Register() {
                         onSubmit={async (formData, actions) => {
                             const { confirmPassword, ...rest } = formData;
                             try {
-                                const { data } = await axios.post('/users/signup', rest);
+                                const { data } = await API.post('/users/signup', rest);
                                 setUser({ ...data });
                             } catch (e) {
                                 actions.setFieldError('email', e.response.data.message);

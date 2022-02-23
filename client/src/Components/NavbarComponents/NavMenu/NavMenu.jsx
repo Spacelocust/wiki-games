@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import axios from 'axios';
+import API from '../../../api/axiosBase';
 
 import { listGames } from '../../GamesComponents/Selector/GamesSelector';
 import NavMenuLink from './NavMenuLink';
@@ -14,7 +15,7 @@ function NavMenu() {
         const source = axios.CancelToken.source();
         (async () => {
             try {
-                const { data } = await axios.get('/games',{
+                const { data } = await API.get('/games',{
                     cancelToken: source.token,
                 });
                 setTimeout(() => {

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import isEmpty from 'lodash/isEmpty';
-import axios from 'axios';
+import API from '../../../api/axiosBase';
 
-import ContainerComponent from '../../GeneralComponents/ContainerComponent/ContainerComponent';
-import HeaderComponent from '../../GeneralComponents/HeaderComponent/HeaderComponent';
-import BodyComponent from '../../GeneralComponents/BodyComponent/BodyComponent';
+import ContainerComponent from '../../GeneralComponents/Containers/ContainerComponent/ContainerComponent';
+import Header from '../../GeneralComponents/Containers/Header/Header';
+import BodyComponent from '../../GeneralComponents/Containers/Body/BodyComponent';
 import overwatch from '../../../assets/images/overwatch.gif';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
-import BackButtonComponent from '../../GeneralComponents/Buttons/BackButtonComponent/BackButtonComponent';
+import BackButtonComponent from '../../GeneralComponents/Buttons/BackButton/BackButtonComponent';
 import Leagues from '../../LeaguesComponents/GameLeagues/Leagues';
 import GameMatchs from '../../MatchComponent/GameMatchs/GameMatchs';
 
@@ -20,7 +20,7 @@ function Game() {
 
     const getGame = async () => {
         try {
-            const { data } = await axios.get(`/games/${params.id}`);
+            const { data } = await API.get(`/games/${params.id}`);
             setTimeout(() => {
                 setGame(data);
                 setLeagues(data.leagues);
@@ -63,7 +63,7 @@ function Game() {
         <ContainerComponent>
             <BackButtonComponent />
             <div className="mt-5">
-                <HeaderComponent img={game.img_url}/>
+                <Header img={game.img_url}/>
                 <BodyComponent>
                     <motion.div
                         variants={container}

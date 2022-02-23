@@ -13,10 +13,10 @@ import Profil from '../../ProfilComponents/Profil';
 import Login from '../../AuthComponents/Auth/Login';
 import NavMenu from '../NavMenu/NavMenu';
 import NavMenuAuth from '../NavMenu/NavMenuAuth';
-import OffcanvasMenu from '../../GeneralComponents/OffcanvasMenuComponent/OffcanvasMenu';
-import NavButton from '../../GeneralComponents/Buttons/NavButtonComponent/NavButton';
-import NavButtonLabel from '../../GeneralComponents/Buttons/NavButtonComponent/NavButtonLabel';
-import { LucideCoins } from '../../GeneralComponents/SvgComponents/SvgComponent';
+import OffcanvasMenu from '../../GeneralComponents/SlideMenu/OffcanvasMenu';
+import NavButton from '../NavButtons/NavButton';
+import NavButtonLabel from '../NavButtons/NavButtonLabel';
+import { LucideCoins } from '../../GeneralComponents/SvgComponent/SvgComponent';
 
 function NavBar() {
     const [user] = AuthReducer(ACTION.user);

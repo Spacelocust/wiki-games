@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import API from '../../../api/axiosBase';
 
 import { listGames } from '../Selector/GamesSelector';
-import ContainerComponent from '../../GeneralComponents/ContainerComponent/ContainerComponent';
+import ContainerComponent from '../../GeneralComponents/Containers/ContainerComponent/ContainerComponent';
 import Card from '../../GeneralComponents/Cards/Card';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 
@@ -16,7 +17,7 @@ function Games() {
         const source = axios.CancelToken.source();
         (async () => {
             try {
-                const { data } = await axios.get('/games',{
+                const { data } = await API.get('/games',{
                     cancelToken: source.token,
                 });
                 setLoader(false);

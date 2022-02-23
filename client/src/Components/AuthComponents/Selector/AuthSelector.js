@@ -13,14 +13,6 @@ export const signin = selectorFamily({
     }
 });
 
-export const AuthCoins = selector({
-    key: 'coins',
-    get: ({ get }) => get(store).user.coins,
-    set: ({ set, get }, newValue) => set(store, prevState => ({
-        ...prevState,
-        user: { ...prevState.user, coins: newValue }
-    }))
-});
 
 export const signout = selector({
     key: 'signout',
@@ -43,6 +35,6 @@ export const AuthReducer = (action, remember = false) => {
         case ACTION.signout:
             return [setSignout]
         case ACTION.user:
-            return [user]
+            return [user, setUser]
     }
 }
