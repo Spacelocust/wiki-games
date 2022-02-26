@@ -12,4 +12,7 @@ API.interceptors.request.use((req) => {
     return req;
 });
 
+export const signin = (value) => API.post('/users/signin', value);
+export const signup = (value) => API.post('/users/signup', value);
+
 export default API;

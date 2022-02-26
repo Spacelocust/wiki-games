@@ -3,8 +3,8 @@ import API from '../../../api/axiosBase';
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
 import { isNull } from 'lodash';
 
-import { AuthReducer } from '../../AuthComponents/Selector/AuthSelector';
-import ACTION from '../../AuthComponents/Selector/AuthAction';
+import AuthReducer from '../../AuthComponents/Selector/UserSelector';
+import ACTION from '../../AuthComponents/Selector/UserAction';
 import empty from '../../../assets/images/img-empty.jpg';
 
 function MatchBet({ match }) {

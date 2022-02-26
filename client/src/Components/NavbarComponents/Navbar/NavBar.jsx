@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { isEmpty } from 'lodash';
 import Navbar from 'react-bootstrap/Navbar';
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
+import { isEmpty } from 'lodash';
 import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
-
-import { AuthReducer } from '../../AuthComponents/Selector/AuthSelector';
-import ACTION from '../../AuthComponents/Selector/AuthAction';
+import AuthReducer from '../../AuthComponents/Selector/UserSelector';
+import ACTION from '../../AuthComponents/Selector/UserAction';
 
 import Profil from '../../ProfilComponents/Profil';
 import Login from '../../AuthComponents/Auth/Login';
@@ -19,7 +18,7 @@ import NavButtonLabel from '../NavButtons/NavButtonLabel';
 import { LucideCoins } from '../../GeneralComponents/SvgComponent/SvgComponent';
 
 function NavBar() {
-    const [user] = AuthReducer(ACTION.user);
+    const [user] = AuthReducer(ACTION.getUser);
 
     const [showMenu, setShowMenu] = useState(false);
     const [showLogin, setShowLogin] = useState(false);

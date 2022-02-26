@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { signout } from '../Selector/AuthSelector';
+
+import { Signout } from '../Selector/UserSelector';
 
 function Logout() {
-    const [, logout] = useRecoilState(signout);
     const navigate = useNavigate();
 
     useEffect(() => {
-        logout({});
+        Signout();
         navigate('/', { replace: true });
     }, []);
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import NavMenuLink from '../NavbarComponents/NavMenu/NavMenuLink';
-import { useRecoilState } from 'recoil';
 
-import { signin } from '../AuthComponents/Selector/AuthSelector';
+import AuthReducer from '../AuthComponents/Selector/UserSelector';
+import ACTION from '../AuthComponents/Selector/UserAction';
 
 function Profil() {
-    const [user,_] = useRecoilState(signin(false));
+    const [user] = AuthReducer(ACTION.getUser);
     return (
         <div>
             <h2 className="text-white">{user.username}</h2>

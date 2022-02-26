@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from "recoil";
 
-import { isAuthent } from "../Selector/AuthSelector";
+import { isAuthent } from "../Selector/UserSelector";
 
 function Guard({ children }) {
     const isLogged = useRecoilValue(isAuthent);

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import API from '../../../api/axiosBase';
 import { Formik, Form, Field } from 'formik';
 import { createUseStyles } from 'react-jss';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
-import { AuthReducer } from '../Selector/AuthSelector';
-import ACTION from '../Selector/AuthAction';
+import { signin } from '../../../api/axiosBase';
+import AuthReducer from '../Selector/UserSelector';
+import ACTION from '../Selector/UserAction';
+
 import InputControl from '../../GeneralComponents/Inputs/InputControl';
 
 function Login() {
     const [remember, setRemember] = useState(false);
-    const [setUser] = AuthReducer(ACTION.signin, remember);
+    const [setUser] = AuthReducer(ACTION.setUser);
     const classes = useStyles();
 
     return (
@@ -22,10 +23,11 @@ function Login() {
                     password: '',
                 }}
                 onSubmit={async (formData, actions) => {
-                    const { email, password } = formData;
                     try {
-                        const { data } = await API.post('/users/signin', { email, password });
-                        setUser({ ...data });
+                        const { data } = await signin(formData);
+                        setUser(data);
+                        remember && localStorage.setItem('user', JSON.stringify(data));
+                        sessionStorage.setItem('user', JSON.stringify(data));
                     } catch (e) {
                         actions.setFieldError('password', 'Erreur: Email ou mot de passe incorrect');
                     }
