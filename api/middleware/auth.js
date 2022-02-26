@@ -13,8 +13,13 @@ const auth = async (req, res, next) => {
         }
 
         next();
-    } catch (e) {
-        console.log(e);
+    } catch ({ response }) {
+        if (response) {
+            console.log(response)
+        }
+        res.status(403).send({
+            "message": 'No token or token expired'
+        });
     }
 }
 
