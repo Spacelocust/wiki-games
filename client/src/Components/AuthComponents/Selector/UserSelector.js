@@ -11,13 +11,6 @@ const userState = selector({
     }
 });
 
-export const Signout = () => {
-    const [setUser] = AuthReducer(ACTION.setUser);
-    setUser({});
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('user');
-}
-
 const AuthReducer = (action) => {
     const [user, setUser] = useRecoilState(userState);
     switch (action) {

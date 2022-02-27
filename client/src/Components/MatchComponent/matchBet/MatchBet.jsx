@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import API from '../../../api/axiosBase';
+import React, { useEffect, useState } from 'react';
+import API, { addMatchBet } from '../../../api/axiosBase';
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
 import { isNull } from 'lodash';
 
 import AuthReducer from '../../AuthComponents/Selector/UserSelector';
 import ACTION from '../../AuthComponents/Selector/UserAction';
 import empty from '../../../assets/images/img-empty.jpg';
+import { TokenHandler } from '../../../Helpers/errorsHandler';
 
 function MatchBet({ match }) {
+    //const { execute } = TokenHandler();
     const [user, setUser] = AuthReducer(ACTION.user);
     const [coins, setCoins] = useState(0);
     const [winners, setWinners] = useState(null);
@@ -23,10 +25,11 @@ function MatchBet({ match }) {
             return;
         }
         try {
-            await API.put('/users/edit', { coins });
-            setUser({ ...user, coins: user.coins - coins });
+            const { data: bet } = await addMatchBet( { choice: winners, match: match.id, coins });
+            setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, bet] });
+            console.log('ici');
         } catch (e) {
-            console.log(e);
+            //await execute(e, addMatchBet( { choice: winners, match: match.id, coins: 200 }));
         }
     };
 

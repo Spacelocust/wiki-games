@@ -1,13 +1,17 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Signout } from '../Selector/UserSelector';
+import AuthReducer from '../Selector/UserSelector';
+import ACTION from '../Selector/UserAction';
 
 function Logout() {
+    const [setUser] = AuthReducer(ACTION.setUser);
     const navigate = useNavigate();
 
     useEffect(() => {
-        Signout();
+        setUser({})
+        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         navigate('/', { replace: true });
     }, []);
 

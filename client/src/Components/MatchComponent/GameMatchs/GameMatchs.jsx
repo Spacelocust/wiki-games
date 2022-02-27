@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import API from '../../../api/axiosBase';
-import { useParams } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { useParams } from 'react-router-dom';
 import { isEmpty, isNull } from 'lodash';
 
+import API from '../../../api/axiosBase';
 import GameMatch from './GameMatch';
 import MatchBet from '../matchBet/MatchBet';
 import OffcanvasMenu from '../../GeneralComponents/SlideMenu/OffcanvasMenu';
