@@ -8,18 +8,22 @@ const client = new PrismaClient();
 
 dotenv.config();
 
+// login user
 export const signin = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await client.user.findUnique({
             where: {
                 email
-            }
+            },
+            select: {
+                bet: true,
+            },
         });
         if (await bcrypt.compare(password, user.password)) {
             const { password, ...rest } = user;
-            const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME });
-            const refreshToken = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.JWT_REFRESH_TIME });
+            const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3600s' });
+            const refreshToken = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_REFRESH, { expiresIn: '86400s' });
 
             res.status(200).json({ ...rest, token, refreshToken });
         } else {
@@ -30,6 +34,7 @@ export const signin = async (req, res) => {
     }
 };
 
+// register user
 export const signup = async (req, res) => {
     const { email, username, password } = req.body;
     try {
@@ -43,11 +48,12 @@ export const signup = async (req, res) => {
                 id: true,
                 email: true,
                 username: true,
-                coins: true
-            }
+                coins: true,
+                bet: true,
+            },
         });
-        const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME });
-        const refreshToken = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.JWT_REFRESH_TIME });
+        const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3600s' });
+        const refreshToken = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_REFRESH, { expiresIn: '86400s' });
 
         res.status(200).json({ ...user, token, refreshToken });
     } catch (e) {
@@ -61,6 +67,30 @@ export const signup = async (req, res) => {
     }
 };
 
+// get user by his token
+export const userByToken = async (req, res) => {
+    const { token, refreshToken } = req.body;
+    try {
+        const user = await client.user.findUnique({
+            where: {
+                id: parseInt(req.userId)
+            },
+            select: {
+                id: true,
+                email: true,
+                username: true,
+                coins: true,
+                bet: true
+            },
+        });
+
+        res.status(200).json({ ...user, token, refreshToken });
+    } catch (e) {
+        res.status(500).json({ message: 'erreur lors de la récupération' });
+    }
+}
+
+// refresh the user token
 export const refreshToken = async (req, res) => {
     try {
         const { refreshToken }= req.body;
@@ -76,19 +106,26 @@ export const refreshToken = async (req, res) => {
                     id: true,
                     email: true,
                     username: true,
-                    coins: true
-                }
+                    coins: true,
+                    bet: true,
+                },
             });
-            const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME });
+            const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3600s' });
             res.status(200).json({ ...user, token, refreshToken })
         }
     } catch (e) {
-        res.status(403).send({
-            "message": 'No token or token expired, please sign in again'
-        });
+        if (e.name === 'TokenExpiredError') {
+            res.status(403).json({
+                name: 'TokenExpiredError',
+                message: 'No token or token expired, please sign in again'
+            });
+        } else {
+            res.status(500).json({ message: 'error' });
+        }
     }
 }
 
+// update user
 export const edit = async (req, res) => {
     const { ...fields } = req.body;
     try {
@@ -108,13 +145,14 @@ export const edit = async (req, res) => {
                 id: true,
                 email: true,
                 username: true,
-                coins: true
+                coins: true,
+                bet: true,
             }
         });
 
         res.status(201).json({ user });
     } catch (e) {
-        res.status(500).json({ error: 'erreur lors de la modificacion' });
+        res.status(500).json({ message: 'erreur lors de la modificacion' });
     }
 };
 

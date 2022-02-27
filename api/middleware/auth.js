@@ -1,26 +1,43 @@
 import jwt from 'jsonwebtoken';
 
-const auth = async (req, res, next) => {
+export const auth = async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
-        const isCustomAuth = token.length < 500;
-
-        let decodedData;
-
-        if(token && isCustomAuth) {
-            decodedData = jwt.verify(token, process.env.JWT_SECRET);
-            req.userId = decodedData.id;
+        if(token && (token.length < 500)) {
+            let { id } = jwt.verify(token, process.env.JWT_SECRET);
+            req.userId = id;
         }
 
         next();
-    } catch ({ response }) {
-        if (response) {
-            console.log(response)
+    } catch (e) {
+        if (e.name === 'TokenExpiredError') {
+            res.status(403).json({
+                name: 'TokenExpiredError',
+                message: 'Token expired',
+            });
+        } else {
+            res.status(403).json({
+                name: 'tokenError',
+                message: 'No token passed',
+            });
         }
-        res.status(403).send({
-            "message": 'No token or token expired'
-        });
     }
 }
 
-export default auth;
+export const authRefreshToken = (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        if(token && (token.length < 500)) {
+            jwt.verify(token, process.env.JWT_SECRET);
+        }
+    } catch (e) {
+        if (e.name === 'TokenExpiredError') {
+            next();
+        } else {
+            res.status(403).json({
+                name: 'tokenError',
+                message: 'No token passed',
+            });
+        }
+    }
+}

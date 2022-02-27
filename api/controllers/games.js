@@ -1,7 +1,7 @@
-import api from '../axiosBase.js';
-import { IMG_GAMES } from '../constant.js';
 import parser from 'parse-link-header';
 
+import api from '../axiosBase.js';
+import { IMG_GAMES } from '../constant.js';
 
 export const getGames = async (req, res) => {
     try {
@@ -32,20 +32,6 @@ export const getGame = async (req, res) => {
 };
 
 export const getGameMatches = async (req, res) => {
-    try {
-        const { data } = await api.get(`/matches?filter[videogame]=${req.params.id}`);
-        res.set({
-            'Content-Type': 'application/json',
-            'Cache-Control': 'max-age: 60'
-        });
-        res.send(data);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-};
-
-//TODO request matchsBet with check coins user and valid matchBet
-export const setMatchsBet = async (req, res) => {
     try {
         const { data } = await api.get(`/matches?filter[videogame]=${req.params.id}`);
         res.set({
