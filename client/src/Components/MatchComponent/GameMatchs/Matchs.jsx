@@ -5,15 +5,15 @@ import { useParams } from 'react-router-dom';
 import { isEmpty, isNull } from 'lodash';
 
 import API from '../../../api/axiosBase';
-import GameMatch from './GameMatch';
-import MatchBet from '../matchBet/MatchBet';
+import Match from './Match';
+import Bet from '../Bet/Bet';
 import OffcanvasMenu from '../../GeneralComponents/SlideMenu/OffcanvasMenu';
 import PaginationComponent from '../../GeneralComponents/Pagination/PaginationComponent';
 import ButtonCustom from '../../GeneralComponents/Buttons/Button/ButtonCustom';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gun-valorant.gif';
 
-function GameMatchs() {
+function Matchs() {
     const params = useParams();
     const [loader, setLoader] = useState(true);
     const [pagination, setPagination] = useState({ state: 'upcoming', page: 1, perPage: 5, maxPage: 0 });
@@ -39,6 +39,7 @@ function GameMatchs() {
                     ...pagination,
                     maxPage: (!isNull(link) ? parseInt(link.last !== undefined ? parseInt(link.last.page) : parseInt(link.prev.page) + 1) : 0)
                 });
+                console.log(data);
                 setMatchs(list);
                 setLoader(false);
             } catch (e) {
@@ -68,8 +69,8 @@ function GameMatchs() {
             </div>
             <ListGroup className="m-2">
                 {(matchs && !loader) ?
-                    (!isEmpty(matchs) ? matchs.map((match) => <ListGroup.Item key={match.id}>
-                            <GameMatch match={match} callback={changeMatchSelected}/>
+                    (!isEmpty(matchs) ? matchs.map((match) => !isEmpty(match.opponents) && <ListGroup.Item key={match.id}>
+                            <Match match={match} callback={changeMatchSelected}/>
                         </ListGroup.Item>)
                         : <ListGroup.Item><p className="m-0 text-center">Aucun matches..</p></ListGroup.Item>)
                     : <ListGroup.Item><LoaderGif img={gun} text="unset"/></ListGroup.Item>
@@ -81,11 +82,11 @@ function GameMatchs() {
             <OffcanvasMenu variants="#fff" closeCallback={() => setBet(!bet)} position={'end'} show={bet}>
                 {matchSelected && <div>
                     <p>{matchSelected.name}</p>
-                    <MatchBet match={matchSelected} />
+                    <Bet match={matchSelected} />
                 </div>}
             </OffcanvasMenu>
         </div>
     );
 }
 
-export default GameMatchs;
+export default Matchs;

@@ -11,11 +11,11 @@ import BadgeComponent from '../../GeneralComponents/Badges/BadgeComponent';
 import { CharmSwords, LucideCoins } from '../../GeneralComponents/SvgComponent/SvgComponent';
 import empty from '../../../assets/images/img-empty.jpg';
 
-function GameMatch({ match, callback }) {
+function Match({ match, callback }) {
     const [user] = AuthReducer(ACTION.getUser);
     const [status, setStatus] = useState('non commencé');
     const [more, setMore] = useState(false);
-    const matchBet = user.bet.find((bet) => bet.match === match.id);
+    const matchBet = !isEmpty(user) && user.bet.find((bet) => bet.match === match.id);
     useEffect(() => {
         setStatus(({
             canceled: 'annulé',
@@ -24,7 +24,14 @@ function GameMatch({ match, callback }) {
             postponed: 'reporté',
             running: 'en cours'
         }[match.status]));
-    }, []);
+    }, [user]);
+
+    const IsWinner = ({ opponent }) => {
+        return status === 'terminé' && <p
+            className={`text-center m-0 font-large font-contrail ${match.winner_id === opponent ? 'text-success' : 'text-danger'}`}>
+            {match.winner_id === opponent ? 'Winner' : 'Looser'}
+        </p>
+    }
 
     return (
         <div>
@@ -37,6 +44,7 @@ function GameMatch({ match, callback }) {
                 <div className="d-flex align-items-center flex-column w-50">
                     <img src={match.opponents[0].opponent.image_url || empty } alt="" style={{ height: '3rem', width: '3rem' }}/>
                     <p className="text-center m-0">{match.opponents[0].opponent.name}</p>
+                    <IsWinner opponent={match.opponents[0].opponent.id} />
                 </div>
                 <div>
                     <CharmSwords height={'48px'}/>
@@ -45,12 +53,17 @@ function GameMatch({ match, callback }) {
                 <div className="d-flex align-items-center flex-column w-50">
                     <img src={match.opponents[1].opponent.image_url || empty} alt="" style={{ height: '3rem', width: '3rem' }}/>
                     <p className="text-center m-0">{match.opponents[1].opponent.name}</p>
+                    <IsWinner opponent={match.opponents[1].opponent.id} />
                 </div>
             </div>
-            {!(isEmpty(user) || status === 'terminé' || status === 'annulé') && <div className="d-flex justify-content-end">
-                {!matchBet ? <Button variant="success" title="Paris" onClick={() => callback(match)}>Parié <LucideCoins
-                    height="18px"/></Button> : <Button variant="warning" title="voir résumé" onClick={() => setMore(!more)}>Déja parié <LucideCoins
-                    height="18px"/></Button>}
+            {!isEmpty(user) && <div className="d-flex justify-content-end">
+                {!matchBet ?
+                    <Button variant="success" title="Paris" onClick={() => callback(match)}>Parié <LucideCoins height="18px"/></Button>
+                    : ({
+                        'terminé': match.winner_id === matchBet.choice ? <Button variant="info">Récuperer coins ! <LucideCoins height="18px"/></Button> : <Button variant="danger">Perdu <LucideCoins height="18px"/></Button>,
+                        'en cours': <Button variant="warning" title="voir résumé" onClick={() => setMore(!more)}>Déja parié <LucideCoins height="18px"/></Button>
+                    }[status])
+                }
             </div>}
             {matchBet && <Collapse in={more}>
                 <div>Vous avez parié: {matchBet.coins} coins
@@ -60,4 +73,4 @@ function GameMatch({ match, callback }) {
     );
 }
 
-export default GameMatch;
+export default Match;

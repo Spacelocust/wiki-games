@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lemon&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Contrail+One&family=Rowdies:wght@300&display=swap');
 
 @import './Components/NavbarComponents/Navbar/NavBar.scss';
 @import 'Components/GeneralComponents/SlideMenu/OffcanvasMenu.scss';
@@ -78,6 +79,14 @@ li {
     text-transform: uppercase;
     font-family: 'Secular One', sans-serif;
   }
+}
+
+.font-contrail {
+  font-family: 'Contrail One', cursive;
+}
+
+.font-rowdies {
+  font-family: 'Rowdies', cursive;
 }
 
 .font-lemon {

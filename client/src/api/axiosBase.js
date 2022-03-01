@@ -23,6 +23,7 @@ export const getUserByToken = (value) => API.post('/users/token', value);
 export const refreshToken = (value) => API.post('/users/refresh_token', value);
 
 // matchs call
-export const addMatchBet = (value) => API.post(`/games/match_bets`, value);
+export const getMatchByBet = (value) => API.post(`/matchs/match_bets`, value);
+export const addBet = (value) => API.post(`/matchs/match_bets/add`, value);
 
 export default API;

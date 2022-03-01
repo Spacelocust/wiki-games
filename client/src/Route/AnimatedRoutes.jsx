@@ -7,6 +7,7 @@ import Games from "../Components/GamesComponents/Games/Games";
 import Game from "../Components/GamesComponents/Games/Game";
 import Register from "../Components/AuthComponents/Auth/Register";
 import Logout from '../Components/AuthComponents/Auth/Logout';
+import UserBets from '../Components/MatchComponent/UserBets/UserBets';
 
 function AnimatedRoutes() {
     const location = useLocation();
@@ -16,6 +17,7 @@ function AnimatedRoutes() {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Home/>}>
                     <Route path="/register" element={<Register />}/>
+                    <Route path="/my-match-bet" element={<UserBets />}/>
                     <Route path="/games" element={<Games/>}/>
                     <Route path="/games/:id" element={<Game/>}/>
                     <Route path="/logout" element={<Logout/>}/>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import API, { addMatchBet } from '../../../api/axiosBase';
+import React, { useState } from 'react';
+import { addBet } from '../../../api/axiosBase';
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
 import { isNull } from 'lodash';
 
@@ -8,7 +8,7 @@ import ACTION from '../../AuthComponents/Selector/UserAction';
 import empty from '../../../assets/images/img-empty.jpg';
 import { TokenHandler } from '../../../Helpers/errorsHandler';
 
-function MatchBet({ match }) {
+function Bet({ match }) {
     //const { execute } = TokenHandler();
     const [user, setUser] = AuthReducer(ACTION.user);
     const [coins, setCoins] = useState(0);
@@ -25,9 +25,9 @@ function MatchBet({ match }) {
             return;
         }
         try {
-            const { data: bet } = await addMatchBet( { choice: winners, match: match.id, coins });
-            setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, bet] });
-            console.log('ici');
+            const { data: bet } = await addBet( { choice: winners, match: match.id, coins });
+            setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, { ...bet }] });
+            console.log(bet);
         } catch (e) {
             //await execute(e, addMatchBet( { choice: winners, match: match.id, coins: 200 }));
         }
@@ -72,4 +72,4 @@ function MatchBet({ match }) {
     </div>;
 }
 
-export default MatchBet;
+export default Bet;
