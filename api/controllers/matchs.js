@@ -1,10 +1,11 @@
 import pm from '@prisma/client';
 import { checkValue1Value2 } from '../helpers/exceptions.js';
+import api from '../axiosBase.js';
 
 const { PrismaClient } = pm;
 const client = new PrismaClient();
 
-export const addMatchBet = async (req, res) => {
+export const addBet = async (req, res) => {
     const { choice, match, coins } = req.body;
 
     try {
@@ -40,8 +41,22 @@ export const addMatchBet = async (req, res) => {
                 coins: true
             }
         });
-        res.status(201).json({ bet });
+        res.status(201).json(bet);
     } catch (e) {
         res.status(500).send(e);
     }
 };
+
+export const getMatchByBet = async (req, res) => {
+    const { bets } = req.body;
+    try {
+        const { data } = await api.get(`/matches/?filter[id]=${bets.reduce((acc, curr) => acc += `${curr},`, '')}`);
+        res.set({
+            'Content-Type': 'application/json',
+            'Cache-Control': 'max-age: 60',
+        });
+        res.status(200).json(data);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+}

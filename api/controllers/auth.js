@@ -16,7 +16,7 @@ export const signin = async (req, res) => {
             where: {
                 email
             },
-            select: {
+            include: {
                 bet: true,
             },
         });
@@ -30,6 +30,7 @@ export const signin = async (req, res) => {
             res.status(400).json({ error: 'invalid credentials' });
         }
     } catch (e) {
+        console.log(e);
         res.status(500).json(e);
     }
 };
