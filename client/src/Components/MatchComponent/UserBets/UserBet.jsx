@@ -9,11 +9,13 @@ import ACTION from '../../AuthComponents/Selector/UserAction';
 import Match from '../GameMatchs/Match';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gun-valorant.gif';
+import BetModalResult from '../Bet/BetModalResult';
 
 function UserBet() {
     const [user] = AuthReducer(ACTION.getUser);
     const [loader, setLoader] = useState(true);
     const [matchs, setMatchs] = useState(false);
+    const [modalExecute] = BetModalResult();
 
     useEffect(() => {
         !isEmpty(user) && (async () => {
@@ -22,6 +24,7 @@ function UserBet() {
                 const { data } = await getMatchByBet({ bets: user.bet.map((bet) => bet.match) })
                 setMatchs(data);
                 setLoader(false);
+                modalExecute()
             } catch (e) {
                 console.log(e)
             }

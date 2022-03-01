@@ -12,15 +12,16 @@ function BadgeComponent({ className, children, variants = '#7952b3', position = 
             textAlign: 'center',
             whiteSpace: 'nowrap',
             verticalAlign: 'baseline',
-            backgroundColor: variants,
-            border: `1px solid ${variants}`,
-            cursor: onClick ? 'pointer' : 'default',
+            cursor: onClick ? 'pointer' : 'default'
         }
     }))();
 
     return (
         <div className={`d-flex justify-content-${position} align-items-center`}>
-            <span className={`${className} ${classes.badge}`} onClick={() => onClick()}>{children}</span>
+            <span className={`${className} ${classes.badge}`}
+                  style={{ backgroundColor: variants }}
+                  onClick={() => onClick()}>{children}
+            </span>
         </div>
     );
 }
