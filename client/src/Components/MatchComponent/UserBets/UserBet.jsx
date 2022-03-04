@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { isEmpty, isNull } from 'lodash';
+import { isEmpty } from 'lodash';
 import ListGroup from 'react-bootstrap/ListGroup';
 
 import { getMatchByBet } from '../../../api/axiosBase';
@@ -7,12 +7,12 @@ import AuthReducer from '../../AuthComponents/Selector/UserSelector';
 import ACTION from '../../AuthComponents/Selector/UserAction';
 
 import Match from '../GameMatchs/Match';
+import BetModalResult from '../Bet/BetModalResult';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gun-valorant.gif';
-import BetModalResult from '../Bet/BetModalResult';
 
 function UserBet() {
-    const [user] = AuthReducer(ACTION.getUser);
+    const [user, setUser] = AuthReducer(ACTION.user);
     const [loader, setLoader] = useState(true);
     const [matchs, setMatchs] = useState(false);
     const [modalExecute] = BetModalResult();
@@ -21,10 +21,12 @@ function UserBet() {
         !isEmpty(user) && (async () => {
             setLoader(true);
             try {
-                const { data } = await getMatchByBet({ bets: user.bet.map((bet) => bet.match) })
-                setMatchs(data);
+                const { data } = await getMatchByBet({ bets: user.bet })
+                setMatchs(data.matchs);
                 setLoader(false);
-                modalExecute()
+
+                data.bets.done && modalExecute(data.coinsReceived);
+                data.coinsUser !== user.coins && setUser({ ...user, coins: data.coinsUser, bet: data.bets.betsUpdated });
             } catch (e) {
                 console.log(e)
             }

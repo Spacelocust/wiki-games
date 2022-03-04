@@ -16,7 +16,7 @@ function Bet({ match }) {
 
     const onChangeCoins = (value) => {
         if (!isNaN(value))
-            setCoins(value > 100 ? user.coins : value < 0 ? 0 : value);
+            setCoins(value > user.coins ? user.coins : value < 0 ? 0 : value);
     };
 
     const onValidBet = async () => {
@@ -27,14 +27,12 @@ function Bet({ match }) {
         try {
             const { data: bet } = await addBet( { choice: winners, match: match.id, coins });
             setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, { ...bet }] });
-            console.log(bet);
         } catch (e) {
             //await execute(e, addMatchBet( { choice: winners, match: match.id, coins: 200 }));
         }
     };
 
     const onChangeWinner = (value) => isNull(winners) ? setWinners(value) : setWinners(winners !== value ? value : null);
-
 
     return <div>
         <p className="m-0">Saisir une mise :</p>
