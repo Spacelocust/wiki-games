@@ -50,12 +50,45 @@ export const addBet = async (req, res) => {
 export const getMatchByBet = async (req, res) => {
     const { bets } = req.body;
     try {
-        const { data } = await api.get(`/matches/?filter[id]=${bets.reduce((acc, curr) => acc += `${curr},`, '')}`);
+        const { data: matchs } = await api.get(`/matches/?filter[id]=${bets.reduce((acc, curr) => acc += `${curr.match},`, '')}&sort=-begin_at`);
         res.set({
             'Content-Type': 'application/json',
             'Cache-Control': 'max-age: 60',
         });
-        res.status(200).json(data);
+
+        let betsDone = [];
+        const coinsReceived = matchs.reduce((acc, curr) => {
+            let bet = bets.find((bet) => bet.match === curr.id);
+            (curr.status === 'finished' && bet.status) && betsDone.push(bet.id);
+            return acc += (curr.status === 'finished' && bet.status) ? (bet.choice === curr.winner_id ? bet.coins : - bet.coins) : 0;
+        }, 0);
+
+        const { bet: betsUpdated, coins: coinsUser } = await client.user.update({
+            where: {
+              id: parseInt(req.userId),
+            },
+            data: {
+                coins: {
+                   [coinsReceived > 0 ? 'increment' : 'decrement']: coinsReceived > 0 ? coinsReceived : coinsReceived * -1,
+                },
+                bet: {
+                    updateMany: {
+                        where: {
+                            id: { in: betsDone },
+                        },
+                        data: {
+                            status: false,
+                        },
+                    },
+                },
+            },
+            select: {
+                coins: true,
+                bet: true,
+            }
+        });
+
+        res.status(200).json({ matchs, coinsReceived, bets: { betsUpdated, done: betsDone.length > 0 }, coinsUser });
     } catch (e) {
         res.status(500).send(e);
     }

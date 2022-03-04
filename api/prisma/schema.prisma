@@ -24,6 +24,7 @@ model Bet {
     choice Int
     match Int
     coins Int
+    status Boolean @default(true)
     user User @relation(fields: [userId], references: [id])
     userId Int
 }

@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `Bet` ADD COLUMN `status` BOOLEAN NOT NULL DEFAULT true;
+
+-- AlterTable
+ALTER TABLE `User` MODIFY `coins` INTEGER NULL DEFAULT 100;
