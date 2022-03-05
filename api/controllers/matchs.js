@@ -60,7 +60,7 @@ export const getMatchByBet = async (req, res) => {
         const coinsReceived = matchs.reduce((acc, curr) => {
             let bet = bets.find((bet) => bet.match === curr.id);
             (curr.status === 'finished' && bet.status) && betsDone.push(bet.id);
-            return acc += (curr.status === 'finished' && bet.status) ? (bet.choice === curr.winner_id ? bet.coins : - bet.coins) : 0;
+            return acc += (curr.status === 'finished' && bet.status) ? (bet.choice === curr.winner_id ? bet.coins * 2 : - bet.coins) : 0;
         }, 0);
 
         const { bet: betsUpdated, coins: coinsUser } = await client.user.update({
