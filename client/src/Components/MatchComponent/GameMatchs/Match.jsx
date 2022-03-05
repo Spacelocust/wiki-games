@@ -9,6 +9,7 @@ import BadgeComponent from '../../GeneralComponents/Badges/BadgeComponent';
 import { CharmSwords, LucideCoins } from '../../GeneralComponents/SvgComponent/SvgComponent';
 import empty from '../../../assets/images/img-empty.jpg';
 import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
 
 function Match({ match, callback, stream }) {
     const [user] = AuthReducer(ACTION.getUser);
@@ -54,7 +55,7 @@ function Match({ match, callback, stream }) {
 
 const CardTeam = ({ opponent, status, match, bet }) => (
     <div className='d-flex align-items-center flex-column w-50'>
-        <img src={opponent.image_url || empty} alt="" className={`${(bet && (opponent.id === bet.choice)) && 'border border-2 border-primary rounded'}`} style={{ height: '3rem', width: '3rem' }}/>
+        <Link to={`/teams/${opponent.id}`}><img src={opponent.image_url || empty} alt="" className={`${(bet && (opponent.id === bet.choice)) && 'border-gold-double rounded'}`} style={{ height: '3rem', width: '3rem' }}/></Link>
         <p className="text-center m-0">{opponent.name}</p>
         <IsWinner opponent={opponent.id} status={status} match={match}/>
     </div>

@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 
-function BackButtonComponent() {
+function BackButtonComponent({ route, previousOn = false }) {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -13,7 +13,7 @@ function BackButtonComponent() {
         let url = location.pathname.split('/');
         url = url.slice(0, url.length - 1).join('/');
 
-        navigate(`${isEmpty(url) ? '/' : url}`);
+        navigate(previousOn ? -1 : `${ !route ? (isEmpty(url) ? '/' : url) : route }`);
     };
 
     return <Button className="btn btn-secondary my-2 font-secular-uppercase" onClick={() => back()}><IconSetter icon={faArrowLeft}

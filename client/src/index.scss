@@ -102,5 +102,8 @@ li {
 .border {
   &-gold {
     border: 2px solid $gold !important;
+    &-double {
+      border: 0.3rem double purple !important;
+    }
   }
 }

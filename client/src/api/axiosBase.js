@@ -26,4 +26,7 @@ export const refreshToken = (value) => API.post('/users/refresh_token', value);
 export const getMatchByBet = (value) => API.post(`/matchs/match_bets`, value);
 export const addBet = (value) => API.post(`/matchs/match_bets/add`, value);
 
+// teams call
+export const getTeam = (id) => API.get(`/teams/${id}`);
+
 export default API;

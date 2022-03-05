@@ -15,6 +15,7 @@ function LoaderGif({ img = teemo, text = `Teemo attend dans l'ombre..` }) {
             }
         }
     };
+
     return (
         <motion.div
             className="container d-flex justify-content-center align-items-center h-100"

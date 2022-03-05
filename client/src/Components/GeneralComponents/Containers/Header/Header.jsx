@@ -20,7 +20,8 @@ class Header extends React.Component {
                     /> : <Load/>}
                 </div>
                 <div className="col-md-10">
-                    <div className='bg-dark w-100 h-100 rounded text-light'>
+                    <div className='bg-dark w-100 h-100 rounded text-light d-flex align-items-center'>
+                        <h2 className="ms-4 m-0 font-secular-uppercase">{ this.props.title }</h2>
                     </div>
                 </div>
             </div>
