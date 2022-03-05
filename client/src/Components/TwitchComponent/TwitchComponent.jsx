@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
+import ReactPlayer from 'react-player/lazy';
 
-function TwitchComponent({ url, show, onHide }) {
+function TwitchComponent({ match, show, onHide }) {
     return (
     <Modal
         show={show}
@@ -11,17 +12,12 @@ function TwitchComponent({ url, show, onHide }) {
         centered
     >
         <Modal.Header closeButton>
-            <Modal.Title id="example-modal-sizes-title-sm">
-                Small Modal
+            <Modal.Title className='font-secular'>
+                { match.name }
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <iframe
-                src={url}
-                height="300"
-                width="40"
-                allowFullScreen="true">
-            </iframe>
+            <ReactPlayer url={match.streams.english.raw_url} controls playing className='w-100'/>
         </Modal.Body>
     </Modal>
     );

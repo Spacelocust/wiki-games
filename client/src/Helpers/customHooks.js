@@ -15,7 +15,7 @@ export const CheckUserExists = () => {
             remember && localStorage.setItem('user', JSON.stringify(data));
             sessionStorage.setItem('user', JSON.stringify(data));
         } catch (e) {
-            console.log(e)
+            throw 'Error: refresh token expired, please sign in again'
         }
     }
 

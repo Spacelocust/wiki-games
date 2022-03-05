@@ -6,10 +6,11 @@ import { isNull } from 'lodash';
 import AuthReducer from '../../AuthComponents/Selector/UserSelector';
 import ACTION from '../../AuthComponents/Selector/UserAction';
 import empty from '../../../assets/images/img-empty.jpg';
+
 import { TokenHandler } from '../../../Helpers/errorsHandler';
 
-function Bet({ match }) {
-    //const { execute } = TokenHandler();
+function Bet({ match, callback }) {
+    const { execute } = TokenHandler();
     const [user, setUser] = AuthReducer(ACTION.user);
     const [coins, setCoins] = useState(0);
     const [winners, setWinners] = useState(null);
@@ -27,8 +28,10 @@ function Bet({ match }) {
         try {
             const { data: bet } = await addBet( { choice: winners, match: match.id, coins });
             setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, { ...bet }] });
+            callback()
         } catch (e) {
-            //await execute(e, addMatchBet( { choice: winners, match: match.id, coins: 200 }));
+            const { data: bet } = await execute(e, addBet( { choice: winners, match: match.id, coins }));
+            setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, { ...bet }] });
         }
     };
 

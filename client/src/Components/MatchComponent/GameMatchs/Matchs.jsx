@@ -12,6 +12,7 @@ import PaginationComponent from '../../GeneralComponents/Pagination/PaginationCo
 import ButtonCustom from '../../GeneralComponents/Buttons/Button/ButtonCustom';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gun-valorant.gif';
+import TwitchComponent from '../../TwitchComponent/TwitchComponent';
 
 function Matchs() {
     const params = useParams();
@@ -22,9 +23,11 @@ function Matchs() {
     const [matchSelected, setMatchSelected] = useState({});
 
     const [bet, setBet] = useState(false);
+    const [live, setLive] = useState(false);
 
     const changeState = (state) => setPagination({ ...pagination, state, page: 1 });
     const pageChange = ({ selected }) => setPagination({ ...pagination, page: selected + 1 });
+
     useEffect(() => {
         const source = axios.CancelToken.source();
         (async () => {
@@ -39,7 +42,6 @@ function Matchs() {
                     ...pagination,
                     maxPage: (!isNull(link) ? parseInt(link.last !== undefined ? parseInt(link.last.page) : parseInt(link.prev.page) + 1) : 0)
                 });
-                console.log(data);
                 setMatchs(list);
                 setLoader(false);
             } catch (e) {
@@ -53,9 +55,15 @@ function Matchs() {
     }, [pagination.page, pagination.state]);
 
     const changeMatchSelected = (match) => {
+        setLive(false);
         setBet(true);
         setMatchSelected(match);
     };
+
+    const onSelectLive = (match) => {
+        setLive(true);
+        setMatchSelected(match);
+    }
 
     return (
         <div className="container">
@@ -70,7 +78,7 @@ function Matchs() {
             <ListGroup className="m-2">
                 {(matchs && !loader) ?
                     (!isEmpty(matchs) ? matchs.map((match) => !isEmpty(match.opponents) && <ListGroup.Item key={match.id}>
-                            <Match match={match} callback={changeMatchSelected}/>
+                            <Match match={match} callback={changeMatchSelected} stream={onSelectLive}/>
                         </ListGroup.Item>)
                         : <ListGroup.Item><p className="m-0 text-center">Aucun matches..</p></ListGroup.Item>)
                     : <ListGroup.Item><LoaderGif img={gun} text="unset"/></ListGroup.Item>
@@ -79,10 +87,11 @@ function Matchs() {
             {(!isEmpty(matchs) && pagination.maxPage > 0) &&
                 <PaginationComponent className="justify-content-center" onPageChange={pageChange}
                                      pageCount={pagination.maxPage} forcePage={(pagination.page - 1)}/>}
+            {live && <TwitchComponent match={matchSelected} show={live} onHide={() => setLive(false)}/>}
             <OffcanvasMenu variants="#fff" closeCallback={() => setBet(!bet)} position={'end'} show={bet}>
                 {matchSelected && <div>
                     <p>{matchSelected.name}</p>
-                    <Bet match={matchSelected} />
+                    <Bet match={matchSelected} callback={() => setBet(false)}/>
                 </div>}
             </OffcanvasMenu>
         </div>

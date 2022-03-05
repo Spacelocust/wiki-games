@@ -6,17 +6,16 @@ import { useCallback } from 'react';
 export const TokenHandler = () => {
     const [user, setUser] = AuthReducer(ACTION.user);
 
-    const execute = useCallback(({ data }, callback) => {
+    const execute = useCallback(({ data }) => {
         return (async () => {
             if (data.name === 'TokenExpiredError' && user) {
                 try {
-                    const { data } = await refreshToken(user);
+                    const { data: userRefresh } = await refreshToken(user);
                     if(localStorage.getItem('user')) {
-                        localStorage.setItem('user', JSON.stringify(data));
+                        localStorage.setItem('user', JSON.stringify(userRefresh));
                     }
-                    sessionStorage.setItem('user', JSON.stringify(data));
-                    setUser(data);
-                    await callback();
+                    sessionStorage.setItem('user', JSON.stringify(userRefresh));
+                    setUser(userRefresh);
                 } catch (e) {
                     console.log(e)
                 }
