@@ -48,9 +48,9 @@ export const addBet = async (req, res) => {
 };
 
 export const getMatchByBet = async (req, res) => {
-    const { bets } = req.body;
+    const { bets, pagination } = req.body;
     try {
-        const { data: matchs } = await api.get(`/matches/?filter[id]=${bets.reduce((acc, curr) => acc += `${curr.match},`, '')}&sort=-begin_at`);
+        let { data: matchs } = await api.get(`/matches/?filter[id]=${bets.reduce((acc, curr) => acc += `${curr.match},`, '')}&sort=-begin_at`);
         res.set({
             'Content-Type': 'application/json',
             'Cache-Control': 'max-age: 60',
@@ -88,7 +88,7 @@ export const getMatchByBet = async (req, res) => {
             }
         });
 
-        res.status(200).json({ matchs, coinsReceived, bets: { betsUpdated, done: betsDone.length > 0 }, coinsUser });
+        res.status(200).json({ matchs: matchs.slice((pagination.page - 1) * 5, pagination.page * 5), coinsReceived, bets: { betsUpdated, done: betsDone.length > 0 }, coinsUser, pagination: { maxPage: Math.ceil(matchs.length / 5), } });
     } catch (e) {
         res.status(500).send(e);
     }
