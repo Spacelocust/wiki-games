@@ -13,7 +13,7 @@ function Leagues({ leagues, searchCallback }) {
     const classes = useStyles();
     const box = {
         open: {
-            height: 'fit-content',
+            height: leagues.length >= 70 ? '15rem' : 'fit-content',
             transition: {
                 duration: 0.5
             }
@@ -49,10 +49,10 @@ function Leagues({ leagues, searchCallback }) {
             </div>
         </div>
         <motion.div
-            className="d-flex justify-content-center align-content-center flex-wrap"
+            className="d-flex justify-content-center flex-wrap"
             variants={box}
             animate={close ? 'close' : 'open'}
-            style={!close ? (leagues.length >= 70 ? { overflow: 'scroll', height: '20rem' } : {}) : { overflow: 'hidden', height: 0 } }
+            style={!close ? (leagues.length >= 70 ? { overflow: 'scroll' } : {}) : { overflow: 'hidden' } }
         >
             {!isEmpty(leagues) ? leagues.map((league) => <League key={league.id} league={league}/>) :
                 <div>vide...</div>}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-import teemo from '../../assets/images/teemo.gif';
+import teemo from '../../assets/images/gif/teemo.gif';
 
 function LoaderGif({ img = teemo, text = `Teemo attend dans l'ombre..` }) {
 

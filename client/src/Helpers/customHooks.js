@@ -4,6 +4,7 @@ import { isNull } from 'lodash';
 import { getUserByToken, refreshToken } from '../api/axiosBase';
 import AuthReducer from '../Components/AuthComponents/Selector/UserSelector';
 import ACTION from '../Components/AuthComponents/Selector/UserAction';
+import { toast } from 'react-toastify';
 
 export const CheckUserExists = () => {
     const [setUser] = AuthReducer(ACTION.setUser);
@@ -15,7 +16,7 @@ export const CheckUserExists = () => {
             remember && localStorage.setItem('user', JSON.stringify(data));
             sessionStorage.setItem('user', JSON.stringify(data));
         } catch (e) {
-            throw 'Error: refresh token expired, please sign in again'
+            Notif('Error: Session expirée, veuillez-vous reconnecter', 'error', 'bottom-right');
         }
     }
 
@@ -45,4 +46,16 @@ export const CheckUserExists = () => {
     }, []);
 
     return { execute };
+}
+
+export const Notif = (message, type = 'success', position = 'top-right') => {
+    toast[type](message, {
+        position,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+    });
 }

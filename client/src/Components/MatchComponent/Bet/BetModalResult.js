@@ -4,8 +4,8 @@ import Swal from 'sweetalert2';
 import confetti from 'canvas-confetti';
 
 import LoaderGif from '../../LoaderComponents/LoaderGif';
-import coinsFilp from '../../../assets/images/coins-flip.gif';
-import amumuSad from '../../../assets/images/amumu-sad.gif';
+import coinsFilp from '../../../assets/images/gif/coins-flip.gif';
+import amumuSad from '../../../assets/images/gif/amumu-sad.gif';
 import blitz from '../../../assets/images/blitz.png';
 
 const BetModalResult = () => {

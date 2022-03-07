@@ -11,7 +11,7 @@ import OffcanvasMenu from '../../GeneralComponents/SlideMenu/OffcanvasMenu';
 import PaginationComponent from '../../GeneralComponents/Pagination/PaginationComponent';
 import ButtonCustom from '../../GeneralComponents/Buttons/Button/ButtonCustom';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
-import gun from '../../../assets/images/gun-valorant.gif';
+import gun from '../../../assets/images/gif/gun-valorant.gif';
 import TwitchComponent from '../../TwitchComponent/TwitchComponent';
 
 function Matchs() {
@@ -77,7 +77,7 @@ function Matchs() {
             </div>
             <ListGroup className="m-2">
                 {(matchs && !loader) ?
-                    (!isEmpty(matchs) ? matchs.map((match) => !isEmpty(match.opponents) && <ListGroup.Item key={match.id}>
+                    (!isEmpty(matchs) ? matchs.map((match) => <ListGroup.Item key={match.id}>
                             <Match match={match} callback={changeMatchSelected} stream={onSelectLive}/>
                         </ListGroup.Item>)
                         : <ListGroup.Item><p className="m-0 text-center">Aucun matches..</p></ListGroup.Item>)

@@ -15,7 +15,7 @@ import BetModalResult from '../Bet/BetModalResult';
 import { TokenHandler } from '../../../Helpers/errorsHandler';
 
 import LoaderGif from '../../LoaderComponents/LoaderGif';
-import gun from '../../../assets/images/gun-valorant.gif';
+import gun from '../../../assets/images/gif/gun-valorant.gif';
 
 function UserBet() {
     const [user, setUser] = AuthReducer(ACTION.user);
@@ -38,8 +38,8 @@ function UserBet() {
                 data.bets.done && modalExecute(data.coinsReceived);
                 data.coinsUser !== user.coins && setUser({ ...user, coins: data.coinsUser, bet: data.bets.betsUpdated });
                 setPagination({ ...pagination, maxPage: data.pagination.maxPage });
-            } catch (e) {
-                await execute(e)
+            } catch ({ response }) {
+                await execute(response);
             }
         })();
     }, [user, reload, pagination.page]);

@@ -6,7 +6,7 @@ import API from '../../../api/axiosBase';
 import ContainerComponent from '../../GeneralComponents/Containers/ContainerComponent/ContainerComponent';
 import Header from '../../GeneralComponents/Containers/Header/Header';
 import BodyComponent from '../../GeneralComponents/Containers/Body/BodyComponent';
-import overwatch from '../../../assets/images/overwatch.gif';
+import overwatch from '../../../assets/images/gif/overwatch.gif';
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import BackButtonComponent from '../../GeneralComponents/Buttons/BackButton/BackButtonComponent';
 import Leagues from '../../LeaguesComponents/GameLeagues/Leagues';
@@ -30,7 +30,6 @@ function Game() {
                 const { data } = await API.get(`/games/${params.id}`);
                 setGame(data);
                 setLeagues(data.leagues);
-                console.log(data)
             } catch (e) {
                 console.log(e);
             }

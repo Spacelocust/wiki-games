@@ -7,7 +7,7 @@ import ACTION from '../../AuthComponents/Selector/UserAction';
 import AuthReducer from '../../AuthComponents/Selector/UserSelector';
 import BadgeComponent from '../../GeneralComponents/Badges/BadgeComponent';
 import { CharmSwords, LucideCoins } from '../../GeneralComponents/SvgComponent/SvgComponent';
-import empty from '../../../assets/images/img-empty.jpg';
+import empty from '../../../assets/images/empty/img-empty.jpg';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
@@ -21,34 +21,40 @@ function Match({ match, callback, stream }) {
     }, [match]);
 
     return (
-        <div>
-            <div className="d-flex justify-content-between">
-                <div className="d-flex">
-                    <BadgeComponent className={`font-small`} variants={status.color}>{status.label}</BadgeComponent>
-                    {(status === STATUS_MATCH.finished && matchBet) && <BadgeComponent
-                        className={`font-small bg-${match.winner_id === matchBet.choice ? 'success' : 'danger'}`}>{match.winner_id === matchBet.choice ? 'Gagné' : 'Perdu'}</BadgeComponent>}
-                    {(status === STATUS_MATCH.running && onLive) && <BadgeComponent className={`font-small`} variants={'#d3455b'} onClick={() => stream(match)}>live&#9679;</BadgeComponent>}
+        <>
+            { match.opponents.length > 1 ? <div>
+                <div className="d-flex justify-content-between">
+                    <div className="d-flex">
+                        <BadgeComponent className={`font-small`} variants={status.color}>{status.label}</BadgeComponent>
+                        {(status === STATUS_MATCH.finished && matchBet) && <BadgeComponent
+                            className={`font-small bg-${match.winner_id === matchBet.choice ? 'success' : 'danger'}`}>{match.winner_id === matchBet.choice ? 'Gagné' : 'Perdu'}</BadgeComponent>}
+                        {(status === STATUS_MATCH.running && onLive) &&
+                            <BadgeComponent className={`font-small`} variants={'#d3455b'}
+                                            onClick={() => stream(match)}>live&#9679;</BadgeComponent>}
+                    </div>
                 </div>
-            </div>
-            <div className="d-flex align-items-center justify-content-evenly">
-                <CardTeam opponent={match.opponents[0].opponent} status={status} match={match} bet={matchBet}/>
-                <div className="d-flex flex-column">
-                    { STATUS_MATCH[match.status] !== STATUS_MATCH.canceled &&
-                        <p className="m-0" style={{ width: 'max-content' }}>
-                        {`${dayjs(match.begin_at).format('DD/MM/YYYY HH:mm')}${!isNull(match.end_at) ? ' - ' + dayjs(match.end_at).format('DD/MM/YYYY HH:mm') : ''}`}
-                        </p>
+                <div className="d-flex align-items-center justify-content-evenly">
+                    <CardTeam opponent={match.opponents[0].opponent} status={status} match={match} bet={matchBet}/>
+                    <div className="d-flex flex-column">
+                        {STATUS_MATCH[match.status] !== STATUS_MATCH.canceled &&
+                            <p className="m-0" style={{ width: 'max-content' }}>
+                                {`${dayjs(match.begin_at).format('DD/MM/YYYY HH:mm')}${!isNull(match.end_at) ? ' - ' + dayjs(match.end_at).format('DD/MM/YYYY HH:mm') : ''}`}
+                            </p>
+                        }
+                        <CharmSwords height={'48px'} className="mx-auto"/>
+                        <p className="text-center my-1">{`${match.results[0].score} - ${match.results[1].score}`}</p>
+                    </div>
+                    <CardTeam opponent={match.opponents[1].opponent} status={status} match={match} bet={matchBet}/>
+                </div>
+                {!isEmpty(user) && <div className="d-flex justify-content-end">
+                    {(!matchBet && ((STATUS_MATCH[match.status] !== STATUS_MATCH.finished) && (STATUS_MATCH[match.status] !== STATUS_MATCH.canceled))) &&
+                        <Button variant="success" title="Paris" onClick={() => callback(match)}>Parié <LucideCoins
+                            height="18px"/></Button>
                     }
-                    <CharmSwords height={'48px'} className="mx-auto"/>
-                    <p className="text-center my-1">{`${match.results[0].score} - ${match.results[1].score}`}</p>
-                </div>
-                <CardTeam opponent={match.opponents[1].opponent} status={status} match={match} bet={matchBet}/>
-            </div>
-            {!isEmpty(user) && <div className="d-flex justify-content-end">
-                {(!matchBet && ((STATUS_MATCH[match.status] !== STATUS_MATCH.finished) && (STATUS_MATCH[match.status] !== STATUS_MATCH.canceled))) &&
-                    <Button variant="success" title="Paris" onClick={() => callback(match)}>Parié <LucideCoins height="18px"/></Button>
-                }
-            </div>}
-        </div>
+                </div>}
+            </div> : <div className="text-center" title={match.league.name}><img src={match.league.image_url || empty} alt="" style={{ height: '3rem', width: 'auto' }}/> Match en cours de préparation... </div>}
+        </>
+
     );
 }
 

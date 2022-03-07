@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addBet } from '../../../api/axiosBase';
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
 import { isNull } from 'lodash';
 
 import AuthReducer from '../../AuthComponents/Selector/UserSelector';
 import ACTION from '../../AuthComponents/Selector/UserAction';
-import empty from '../../../assets/images/img-empty.jpg';
+import empty from '../../../assets/images/empty/img-empty.jpg';
 
 import { TokenHandler } from '../../../Helpers/errorsHandler';
+import { Notif } from '../../../Helpers/customHooks';
 
 function Bet({ match, callback }) {
     const { execute } = TokenHandler();
@@ -20,18 +21,20 @@ function Bet({ match, callback }) {
             setCoins(value > user.coins ? user.coins : value < 0 ? 0 : value);
     };
 
+    useEffect(() => { return; }, [user]);
+
     const onValidBet = async () => {
         if(coins <= 0 || isNull(winners)) {
-            console.log('nop')
+            Notif('Error: Veuillez saisir un montant et une équipe', 'error', 'bottom-right');
             return;
         }
         try {
             const { data: bet } = await addBet( { choice: winners, match: match.id, coins });
             setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, { ...bet }] });
             callback()
-        } catch (e) {
-            const { data: bet } = await execute(e, addBet( { choice: winners, match: match.id, coins }));
-            setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, { ...bet }] });
+            Notif('Success: Paris enregistré', 'success', 'bottom-right');
+        } catch ({ response }) {
+            await execute(response, onValidBet);
         }
     };
 

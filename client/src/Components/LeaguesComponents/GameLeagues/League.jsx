@@ -1,5 +1,5 @@
 import React from 'react';
-import empty from '../../../assets/images/img-empty.jpg';
+import empty from '../../../assets/images/empty/img-empty.jpg';
 import { motion } from 'framer-motion';
 
 function League({ league }) {
