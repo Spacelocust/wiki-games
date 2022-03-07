@@ -22,7 +22,7 @@ export const signin = async (req, res) => {
         });
         if (await bcrypt.compare(password, user.password)) {
             const { password, ...rest } = user;
-            const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '120s' });
+            const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3600s' });
             const refreshToken = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_REFRESH, { expiresIn: '86400s' });
 
             res.status(200).json({ ...rest, token, refreshToken });
