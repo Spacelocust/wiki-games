@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+import leaguesRoutes from './routes/leagues.js';
 import teamsRoutes from './routes/teams.js';
 import matchsRoutes from './routes/matchs.js';
 import gamesRoutes from './routes/games.js';
@@ -23,6 +24,7 @@ app.use(
 );
 
 //Custom route
+app.use('/api', leaguesRoutes);
 app.use('/api', teamsRoutes);
 app.use('/api', matchsRoutes);
 app.use('/api', gamesRoutes);

@@ -89,5 +89,15 @@ export const getGameUpcommingMatches = async (req, res) => {
     }
 };
 
-
-
+export const getGameTeams = async (req, res) => {
+    try {
+        const { data } = await api.get(`/teams?filter[videogame_id]=${req.params.id}&per_page=100`);
+        res.set({
+            'Content-Type': 'application/json',
+            'Cache-Control': 'max-age: 60'
+        });
+        res.status(200).json(data);
+    } catch (e) {
+        res.status(404).json({ message: 'équipes introuvables' });
+    }
+}

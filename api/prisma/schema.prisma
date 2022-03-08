@@ -17,6 +17,22 @@ model User {
     password String
     coins Int? @default(100)
     bet Bet[]
+    favoriteTeam FavoriteTeam[]
+    favoriteLeague FavoriteLeague[]
+}
+
+model FavoriteTeam {
+    id Int @id @default(autoincrement())
+    teamId Int @unique
+    user User @relation(fields: [userId], references: [id])
+    userId Int
+}
+
+model FavoriteLeague {
+    id Int @id @default(autoincrement())
+    leagueId Int @unique
+    user User @relation(fields: [userId], references: [id])
+    userId Int
 }
 
 model Bet {

@@ -18,6 +18,8 @@ export const signin = async (req, res) => {
             },
             include: {
                 bet: true,
+                favoriteTeam: true,
+                favoriteLeague: true
             },
         });
         if (await bcrypt.compare(password, user.password)) {
@@ -30,7 +32,6 @@ export const signin = async (req, res) => {
             res.status(400).json({ error: 'invalid credentials' });
         }
     } catch (e) {
-        console.log(e);
         res.status(500).json(e);
     }
 };
@@ -51,6 +52,8 @@ export const signup = async (req, res) => {
                 username: true,
                 coins: true,
                 bet: true,
+                favoriteTeam: true,
+                favoriteLeague: true
             },
         });
         const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3600s' });
@@ -81,7 +84,9 @@ export const userByToken = async (req, res) => {
                 email: true,
                 username: true,
                 coins: true,
-                bet: true
+                bet: true,
+                favoriteTeam: true,
+                favoriteLeague: true
             },
         });
 
@@ -109,6 +114,8 @@ export const refreshToken = async (req, res) => {
                     username: true,
                     coins: true,
                     bet: true,
+                    favoriteTeam: true,
+                    favoriteLeague: true
                 },
             });
             const token = await jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3600s' });

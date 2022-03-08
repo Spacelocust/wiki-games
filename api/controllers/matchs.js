@@ -49,6 +49,11 @@ export const addBet = async (req, res) => {
 
 export const getMatchByBet = async (req, res) => {
     const { bets, pagination } = req.body;
+
+    if (bets.length < 1) {
+        return res.status(200).json([]);
+    }
+
     try {
         let { data: matchs } = await api.get(`/matches/?filter[id]=${bets.reduce((acc, curr) => acc += `${curr.match},`, '')}&sort=-begin_at`);
         res.set({
@@ -87,9 +92,9 @@ export const getMatchByBet = async (req, res) => {
                 bet: true,
             }
         });
-
         res.status(200).json({ matchs: matchs.slice((pagination.page - 1) * 5, pagination.page * 5), coinsReceived, bets: { betsUpdated, done: betsDone.length > 0 }, coinsUser, pagination: { maxPage: Math.ceil(matchs.length / 5), } });
     } catch (e) {
+        console.log(e)
         res.status(500).send(e);
     }
 }
