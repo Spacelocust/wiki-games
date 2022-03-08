@@ -1,10 +1,11 @@
-import { useCallback } from 'react';
+import { toast } from 'react-toastify';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 import { isNull } from 'lodash';
 
 import { getUserByToken, refreshToken } from '../api/axiosBase';
 import AuthReducer from '../Components/AuthComponents/Selector/UserSelector';
 import ACTION from '../Components/AuthComponents/Selector/UserAction';
-import { toast } from 'react-toastify';
+
 
 export const CheckUserExists = () => {
     const [setUser] = AuthReducer(ACTION.setUser);
@@ -58,4 +59,15 @@ export const Notif = (message, type = 'success', position = 'top-right') => {
         draggable: true,
         progress: undefined,
     });
+}
+
+export const useFirstEffect = (effect, deps) => {
+    const firstUpdate = useRef(true);
+    useLayoutEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+        effect();
+    }, deps);
 }

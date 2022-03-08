@@ -39,21 +39,21 @@ function Team() {
             <BackButtonComponent previousOn />
             {!isEmpty(team) && !loader ? <>
                 <Header img={team.image_url} title={team.name}/>
-                <BodyComponent className="bg-dark text-light rounded p-1">
+                {!isEmpty(team.players) && <BodyComponent className="bg-dark text-light rounded p-1">
                     <div className="d-flex flex-wrap justify-content-center">
                         {team.players.map((player) => (
-                            <Player player={player} key={player.id}/>
+                            <Player player={player} game={team.current_videogame} key={player.id}/>
                         ))}
                     </div>
-                </BodyComponent>
-                {!isEmpty(match) && <BodyComponent className="bg-dark text-light rounded p-1">
+                </BodyComponent>}
+                <BodyComponent className="bg-dark text-light rounded p-1">
                     <h2 className="font-secular m-2">Dernier matche</h2>
                     <div className="container">
                         <ListGroup>
-                            <ListGroup.Item><Match match={match}/></ListGroup.Item>
+                            <ListGroup.Item>{!isEmpty(match) ? <Match match={match}/> : 'Aucun match en cours..'}</ListGroup.Item>
                         </ListGroup>
                     </div>
-                </BodyComponent>}
+                </BodyComponent>
             </> : <LoaderGif img={caytlin} text={'Caytlin attends son équipe..'}/>}
 
         </ContainerComponent>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 
-function BadgeComponent({ className, children, variants = '#7952b3', position = 'start', onClick, url }) {
+function BadgeComponent({ className, children, variants = '#7952b3', position = 'start', onClick = () => {}, url }) {
     const classes = (createUseStyles({
         badge: {
             borderRadius: '50rem',

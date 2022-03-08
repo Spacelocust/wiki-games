@@ -73,6 +73,9 @@ li {
   &-rainbow {
     animation: 1s infinite rainbow ease-in-out;
   }
+  &-gold {
+    color: $gold;
+  }
 }
 
 .font-secular {

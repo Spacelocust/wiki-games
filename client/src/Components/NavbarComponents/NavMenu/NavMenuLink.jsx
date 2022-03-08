@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Children, cloneElement } from 'react';
 import { createUseStyles } from "react-jss";
 import { Collapse } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
@@ -28,6 +28,7 @@ function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
         },
         linkChildren: {
             marginLeft: '0.7rem',
+            fontSize: '0.9em',
         },
         icon: {
             fontSize: '0.7rem',
@@ -57,7 +58,9 @@ function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
             {children && <Collapse in={open}>
                 <div className={classes.linkChildren}>
                     <ul>
-                        {children}
+                        {Children.map(children, (child) => (
+                            child.type === "NavMenuLink" ? cloneElement(child, { colorHover }) : child
+                        ))}
                     </ul>
                 </div>
             </Collapse>}

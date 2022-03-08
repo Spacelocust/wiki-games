@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import API from '../../../api/axiosBase';
 
@@ -41,14 +41,15 @@ function Game() {
             <BackButtonComponent />
             <div className="mt-5">
                 <Header img={game.img_url} title={game.name}/>
-                <BodyComponent className='bg-dark text-light rounded p-1'>
-                    <h2 className="font-secular m-2">Matchs</h2>
-                    <Matchs />
-                </BodyComponent>
+                <Link to={`/games/${game.id}/teams`}>teams</Link>
                 <BodyComponent className='bg-white rounded'>
                     { !isEmpty(game) ?
                         <Leagues leagues={leagues} searchCallback={searchLeagues}/>
                         : <LoaderGif img={overwatch} text="unset"/>}
+                </BodyComponent>
+                <BodyComponent className='bg-dark text-light rounded p-1'>
+                    <h2 className="font-secular m-2">Matchs</h2>
+                    <Matchs />
                 </BodyComponent>
             </div>
         </ContainerComponent>

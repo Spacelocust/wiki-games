@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { addBet } from '../../../api/axiosBase';
 import { FormControl, InputGroup, Button } from 'react-bootstrap';
 import { isNull } from 'lodash';
@@ -15,28 +15,31 @@ function Bet({ match, callback }) {
     const [user, setUser] = AuthReducer(ACTION.user);
     const [coins, setCoins] = useState(0);
     const [winners, setWinners] = useState(null);
+    const [validBet, setValidBet] = useState(false);
 
     const onChangeCoins = (value) => {
         if (!isNaN(value))
             setCoins(value > user.coins ? user.coins : value < 0 ? 0 : value);
     };
 
-    useEffect(() => { return; }, [user]);
-
-    const onValidBet = async () => {
-        if(coins <= 0 || isNull(winners)) {
-            Notif('Error: Veuillez saisir un montant et une équipe', 'error', 'bottom-right');
-            return;
-        }
+    const onConfirmBet = async () => {
         try {
-            const { data: bet } = await addBet( { choice: winners, match: match.id, coins });
+            const { data: bet } = await addBet({ choice: winners, match: match.id, coins });
             setUser({ ...user, coins: user.coins - coins, bet: [...user.bet, { ...bet }] });
-            callback()
+            callback();
             Notif('Success: Paris enregistré', 'success', 'bottom-right');
         } catch ({ response }) {
             await execute(response, onValidBet);
         }
     };
+
+    const onValidBet = () => {
+        if (coins <= 0 || isNull(winners)) {
+            Notif('Error: Veuillez saisir un montant et une équipe', 'error', 'bottom-right');
+            return;
+        }
+        setValidBet(true);
+    }
 
     const onChangeWinner = (value) => isNull(winners) ? setWinners(value) : setWinners(winners !== value ? value : null);
 
@@ -70,8 +73,13 @@ function Bet({ match, callback }) {
                 <p className="text-center m-0">{opponent.acronym}</p>
             </div>))}
         </div>
-        <div className="d-flex justify-content-end mt-3">
-            <Button variant="success" onClick={() => onValidBet()}>valider</Button>
+        <div className={`d-flex justify-content-${ !validBet ? 'end' : 'center' } mt-3`}>
+            {validBet ? <>
+                    <Button variant="danger" onClick={() => setValidBet(false)}>Annuler</Button>
+                    <Button variant="info" className='text-white ms-1' onClick={() => onConfirmBet()}>Confirmer</Button>
+                </> :
+                <Button variant="success" onClick={() => onValidBet()}>Valider</Button>
+            }
         </div>
     </div>;
 }

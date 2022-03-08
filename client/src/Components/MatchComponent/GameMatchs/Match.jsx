@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import _, { isEmpty, isNull } from 'lodash';
+import dayjs from 'dayjs';
 
 import { STATUS_MATCH } from '../../../Constants/Matchs';
 import ACTION from '../../AuthComponents/Selector/UserAction';
 import AuthReducer from '../../AuthComponents/Selector/UserSelector';
+
 import BadgeComponent from '../../GeneralComponents/Badges/BadgeComponent';
 import { CharmSwords, LucideCoins } from '../../GeneralComponents/SvgComponent/SvgComponent';
 import empty from '../../../assets/images/empty/img-empty.jpg';
-import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
+import FavoriteTooltip from '../../FavoriteComponents/FavoriteTooltip';
 
 function Match({ match, callback, stream }) {
     const [user] = AuthReducer(ACTION.getUser);
     const [status, setStatus] = useState(STATUS_MATCH.not_started);
     const matchBet = !isEmpty(user) && user.bet.find((bet) => bet.match === match.id);
     const onLive = !isNull(match.streams.english.raw_url);
+
     useEffect(() => {
         setStatus(STATUS_MATCH[match.status]);
     }, [match]);
@@ -34,7 +37,7 @@ function Match({ match, callback, stream }) {
                     </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-evenly">
-                    <CardTeam opponent={match.opponents[0].opponent} status={status} match={match} bet={matchBet}/>
+                    <CardTeam user={user} opponent={match.opponents[0].opponent} status={status} match={match} bet={matchBet}/>
                     <div className="d-flex flex-column">
                         {STATUS_MATCH[match.status] !== STATUS_MATCH.canceled &&
                             <p className="m-0" style={{ width: 'max-content' }}>
@@ -44,7 +47,7 @@ function Match({ match, callback, stream }) {
                         <CharmSwords height={'48px'} className="mx-auto"/>
                         <p className="text-center my-1">{`${match.results[0].score} - ${match.results[1].score}`}</p>
                     </div>
-                    <CardTeam opponent={match.opponents[1].opponent} status={status} match={match} bet={matchBet}/>
+                    <CardTeam user={user} opponent={match.opponents[1].opponent} status={status} match={match} bet={matchBet}/>
                 </div>
                 {!isEmpty(user) && <div className="d-flex justify-content-end">
                     {(!matchBet && ((STATUS_MATCH[match.status] !== STATUS_MATCH.finished) && (STATUS_MATCH[match.status] !== STATUS_MATCH.canceled))) &&
@@ -58,10 +61,11 @@ function Match({ match, callback, stream }) {
     );
 }
 
-
-const CardTeam = ({ opponent, status, match, bet }) => (
+const CardTeam = ({ user, opponent, status, match, bet }) => (
     <div className='d-flex align-items-center flex-column w-50'>
-        <Link to={`/teams/${opponent.id}`}><img src={opponent.image_url || empty} alt="" className={`${(bet && (opponent.id === bet.choice)) && 'border-gold-double rounded'}`} style={{ height: '3rem', width: '3rem' }}/></Link>
+        <FavoriteTooltip item={opponent.id} favoriteItem={user.favoriteTeam.find(({ teamId }) => teamId === opponent.id)}>
+            <Link to={`/teams/${opponent.id}`}><img src={opponent.image_url || empty} alt="" className={`${(bet && (opponent.id === bet.choice)) && 'border-gold-double rounded'}`} style={{ height: '3rem', width: '100%' }}/></Link>
+        </FavoriteTooltip>
         <p className="text-center m-0">{opponent.name}</p>
         <IsWinner opponent={opponent.id} status={status} match={match}/>
     </div>

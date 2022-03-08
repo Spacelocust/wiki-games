@@ -42,7 +42,7 @@ function UserBet() {
                 await execute(response);
             }
         })();
-    }, [user, reload, pagination.page]);
+    }, [user.coins, reload, pagination.page]);
 
     const pageChange = ({ selected }) => setPagination({ ...pagination, page: selected + 1 });
 
