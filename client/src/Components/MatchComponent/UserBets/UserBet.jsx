@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
@@ -18,6 +19,7 @@ import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gif/gun-valorant.gif';
 
 function UserBet() {
+    const navigate = useNavigate();
     const [user, setUser] = AuthReducer(ACTION.user);
     const [modalExecute] = BetModalResult();
     const { execute } = TokenHandler();
@@ -29,7 +31,7 @@ function UserBet() {
     const [matchSelected, setMatchSelected] = useState(false)
 
     useEffect(() => {
-        !isEmpty(user) && (async () => {
+        !isEmpty(user) ? (async () => {
             setLoader(true);
             try {
                 const { data } = await getMatchByBet({ bets: user.bet, pagination })
@@ -41,7 +43,7 @@ function UserBet() {
             } catch ({ response }) {
                 await execute(response);
             }
-        })();
+        })() : navigate('/');
     }, [user.coins, reload, pagination.page]);
 
     const pageChange = ({ selected }) => setPagination({ ...pagination, page: selected + 1 });

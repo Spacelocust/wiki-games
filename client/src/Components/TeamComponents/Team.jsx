@@ -28,7 +28,6 @@ function Team() {
                setTeam(data.team);
                setMatch(data.match[0])
                setLoader(false);
-               console.log(data.team);
            } catch (e) {
                console.error(e);
            }

@@ -20,6 +20,7 @@
     "hamburger-react": "^2.4.1",
     "history": "^5.2.0",
     "lodash": "^4.17.21",
+    "ninja-keys": "^1.1.12",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
     "react-content-loader": "^6.1.0",

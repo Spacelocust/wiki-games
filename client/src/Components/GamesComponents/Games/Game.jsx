@@ -41,7 +41,6 @@ function Game() {
             <BackButtonComponent />
             <div className="mt-5">
                 <Header img={game.img_url} title={game.name}/>
-                <Link to={`/games/${game.id}/teams`}>teams</Link>
                 <BodyComponent className='bg-white rounded'>
                     { !isEmpty(game) ?
                         <Leagues leagues={leagues} searchCallback={searchLeagues}/>

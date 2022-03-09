@@ -32,10 +32,11 @@ export const addBet = (value) => API.post(`/matchs/match_bets/add`, value);
 // Leagues call
 export const getLeague = (id) => API.get(`/leagues/${id}`);
 
-// Teams call
+// TeamsFavorite call
 export const getTeam = (id) => API.get(`/teams/${id}`);
 
 // Favorite calls
+export const getFavorite = (path = 'teams') => API.get(`/${path}`);
 export const addFavorite = (id, path = 'teams') => API.post(`/${path}/favorite/add`, { id });
 export const deleteFavorite = (id, path = 'teams') => API.delete(`/${path}/favorite/${id}`);
 

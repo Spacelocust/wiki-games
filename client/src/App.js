@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 import AnimatedRoutes from './Route/AnimatedRoutes';
 import { CheckUserExists } from './Helpers/customHooks';
+import HotKeys from './Components/HotKeysComponent/HotKeys';
 
 function App() {
     const { execute } = CheckUserExists();
@@ -12,6 +13,7 @@ function App() {
     }, []);
 
     return <Router>
+        <HotKeys />
         <ToastContainer/>
         <AnimatedRoutes/>
     </Router>;
