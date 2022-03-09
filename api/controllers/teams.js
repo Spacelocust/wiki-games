@@ -18,6 +18,24 @@ export const getTeam = async (req, res) => {
     }
 };
 
+export const getTeamsFavorite = async (req, res) => {
+    try {
+        const { favoriteTeam } = await client.user.findUnique({
+            where: {
+                id: req.userId,
+            },
+            select: {
+                favoriteTeam: true,
+            }
+        })
+        const { data: teams } = await api.get(`/teams/?filter[id]=${favoriteTeam.map(({ teamId }) => teamId)}`);
+        res.status(201).json(teams);
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ message: 'Erreur lors de la récupération' });
+    }
+};
+
 export const addTeamFavorite = async (req, res) => {
     const { id } = req.body;
     try {
@@ -42,7 +60,6 @@ export const deleteTeamFavorite = async (req, res) => {
         });
         res.status(200).json(favoriteTeam);
     } catch (e) {
-        console.log(e)
         res.status(500).json({ message: 'Erreur lors de la suppression' });
     }
 };
