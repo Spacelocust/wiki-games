@@ -7,18 +7,26 @@ const client = new PrismaClient();
 export const getTeam = async (req, res) => {
     try {
         const { data: team } = await api.get(`/teams/${req.params.id}`);
-        const { data: match } = await api.get(`/teams/${req.params.id}/matches?filter[running]=true`);
+        let { data: match } = await api.get(`/teams/${req.params.id}/matches?filter[running]=true`);
         res.set({
             'Content-Type': 'application/json',
             'Cache-Control': 'max-age: 60'
         });
+
+        if (match.length > 0) {
+            let numberBets = await getBetMatch(match[0].id);
+            match = [{ ...match[0], numberBets }];
+        }
+
         res.send({ team, match });
     } catch (e) {
+        console.log(e)
         res.status(500).send(e);
     }
 };
 
 export const getTeamsFavorite = async (req, res) => {
+    let teams = [];
     try {
         const { favoriteTeam } = await client.user.findUnique({
             where: {
@@ -27,11 +35,15 @@ export const getTeamsFavorite = async (req, res) => {
             select: {
                 favoriteTeam: true,
             }
-        })
-        const { data: teams } = await api.get(`/teams/?filter[id]=${favoriteTeam.map(({ teamId }) => teamId)}`);
+        });
+
+        if(favoriteTeam.length > 0) {
+            const { data } = await api.get(`/teams/?filter[id]=${favoriteTeam.map(({ teamId }) => teamId)}`);
+            teams = data;
+        }
+
         res.status(201).json(teams);
     } catch (e) {
-        console.log(e)
         res.status(500).json({ message: 'Erreur lors de la récupération' });
     }
 };
@@ -63,3 +75,15 @@ export const deleteTeamFavorite = async (req, res) => {
         res.status(500).json({ message: 'Erreur lors de la suppression' });
     }
 };
+
+const getBetMatch = async (id) => {
+    try {
+        return await client.bet.count({
+            where: {
+                match: id,
+            }
+        });
+    } catch (e) {
+        console.log(e)
+    }
+}

@@ -123,7 +123,7 @@ export const refreshToken = async (req, res) => {
         }
     } catch (e) {
         if (e.name === 'TokenExpiredError') {
-            res.status(403).json({
+            res.status(419).json({
                 name: 'TokenExpiredError',
                 message: 'Refresh token expired, please sign in again'
             });

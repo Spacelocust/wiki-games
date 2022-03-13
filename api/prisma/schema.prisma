@@ -16,7 +16,7 @@ model User {
     username String
     password String
     coins Int? @default(100)
-    bet Bet[]
+    bet FormBet[]
     favoriteTeam FavoriteTeam[]
     favoriteLeague FavoriteLeague[]
 }

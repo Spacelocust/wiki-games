@@ -61,12 +61,23 @@ export const getMatchByBet = async (req, res) => {
             'Cache-Control': 'max-age: 60',
         });
 
+        matchs = await matchs.reduce(async (acc, curr) => {
+            const result = await acc;
+            const numberBets = await getBetMatch(curr.id);
+            return [...result, { ...curr, numberBets }];
+        }, []);
+
         let betsDone = [];
         const coinsReceived = matchs.reduce((acc, curr) => {
             let bet = bets.find((bet) => bet.match === curr.id);
+            console.log((curr.status === 'finished' && bet.status) && bet);
             (curr.status === 'finished' && bet.status) && betsDone.push(bet.id);
             return acc += (curr.status === 'finished' && bet.status) ? (bet.choice === curr.winner_id ? bet.coins * 2 : - bet.coins) : 0;
         }, 0);
+
+        const userFound = await client.user.findUnique({
+            where: { id: req.userId }, select: { coins: true },
+        });
 
         const { bet: betsUpdated, coins: coinsUser } = await client.user.update({
             where: {
@@ -74,7 +85,7 @@ export const getMatchByBet = async (req, res) => {
             },
             data: {
                 coins: {
-                   [coinsReceived > 0 ? 'increment' : 'decrement']: coinsReceived > 0 ? coinsReceived : coinsReceived * -1,
+                   set: (coinsReceived >= 0 ? userFound.coins + coinsReceived : (userFound.coins + coinsReceived > 0 ? userFound.coins + coinsReceived : 0)),
                 },
                 bet: {
                     updateMany: {
@@ -94,7 +105,18 @@ export const getMatchByBet = async (req, res) => {
         });
         res.status(200).json({ matchs: matchs.slice((pagination.page - 1) * 5, pagination.page * 5), coinsReceived, bets: { betsUpdated, done: betsDone.length > 0 }, coinsUser, pagination: { maxPage: Math.ceil(matchs.length / 5), } });
     } catch (e) {
-        console.log(e)
         res.status(500).send(e);
+    }
+}
+
+const getBetMatch = async (id) => {
+    try {
+        return await client.bet.count({
+            where: {
+                match: id,
+            }
+        });
+    } catch (e) {
+        console.log(e)
     }
 }

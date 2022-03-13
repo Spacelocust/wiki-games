@@ -1,7 +1,10 @@
+import pm from '@prisma/client';
 import parser from 'parse-link-header';
-
 import api from '../axiosBase.js';
 import { IMG_GAMES } from '../constant.js';
+
+const { PrismaClient } = pm;
+const client = new PrismaClient();
 
 export const getGames = async (req, res) => {
     try {
@@ -31,63 +34,39 @@ export const getGame = async (req, res) => {
     }
 };
 
-export const getGameMatches = async (req, res) => {
-    try {
-        const { data } = await api.get(`/matches?filter[videogame]=${req.params.id}`);
-        res.set({
-            'Content-Type': 'application/json',
-            'Cache-Control': 'max-age: 60'
-        });
-        res.send(data);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-};
-
-export const  getGamePastMatches = async (req, res) => {
+export const getGameMatchesByTime = async (time, req, res) => {
     const { id, page, per_page } = req.params;
     try {
-        const { data, headers } = await api.get(`/matches/past/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
-        res.set({
-            'Content-Type': 'application/json',
-            'Cache-Control': 'max-age: 60'
-        });
-        const link = parser(headers.link)
-        res.send({ list: data, link });
-    } catch (e) {
-        res.status(500).send(e);
-    }
-};
-
-export const getGameRunningMatches = async (req, res) => {
-    const { id, page, per_page } = req.params;
-    try {
-        const { data, headers } = await api.get(`/matches/running/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
-        res.set({
-            'Content-Type': 'application/json',
-            'Cache-Control': 'max-age: 60'
-        });
-        const link = parser(headers.link)
-        res.send({ list: data, link });
-    } catch (e) {
-        res.status(500).send(e);
-    }
-};
-
-export const getGameUpcommingMatches = async (req, res) => {
-    const { id, page, per_page } = req.params;
-    try {
-        const { data, headers } = await api.get(`/matches/upcoming/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
+        let { data: matchs, headers } = await api.get(`/matches/${time}/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
         res.set({
             'Content-Type': 'application/json',
             'Cache-Control': 'max-age: 60',
         });
+
+        matchs = await matchs.reduce(async (acc, curr) => {
+            const result = await acc;
+            const numberBets = await getBetMatch(curr.id);
+            return [...result, { ...curr, numberBets }];
+        }, []);
+
         const link = parser(headers.link);
-        res.send({ list: data, link });
+        res.send({ list: matchs, link });
     } catch (e) {
         res.status(500).send(e);
     }
 };
+
+const getBetMatch = async (id) => {
+    try {
+        return await client.bet.count({
+            where: {
+                match: id,
+            }
+        });
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 export const getGameTeams = async (req, res) => {
     try {
