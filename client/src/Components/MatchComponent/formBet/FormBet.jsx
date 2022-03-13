@@ -10,8 +10,8 @@ import empty from '../../../assets/images/empty/img-empty.jpg';
 import { TokenHandler } from '../../../Helpers/errorsHandler';
 import { Notif } from '../../../Helpers/customHooks';
 
-function Bet({ match, callback }) {
-    const { execute } = TokenHandler();
+function FormBet({ match, callback }) {
+    const [checkRefreshToken] = TokenHandler();
     const [user, setUser] = AuthReducer(ACTION.user);
     const [coins, setCoins] = useState(0);
     const [winners, setWinners] = useState(null);
@@ -29,7 +29,7 @@ function Bet({ match, callback }) {
             callback();
             Notif('Success: Paris enregistré', 'success', 'bottom-right');
         } catch ({ response }) {
-            await execute(response, onValidBet);
+            await checkRefreshToken(response, onValidBet);
         }
     };
 
@@ -84,4 +84,4 @@ function Bet({ match, callback }) {
     </div>;
 }
 
-export default Bet;
+export default FormBet;

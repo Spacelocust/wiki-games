@@ -13,7 +13,7 @@ function Profil() {
                 <NavMenuLink colorHover="#23a6d5" text="Profil"/>
                 <NavMenuLink colorHover="#23a6d5" text="Mes paris" to="/my-match-bet"/>
                 <NavMenuLink colorHover="#23a6d5" text="Favoris">
-                    <NavMenuLink text="Equipes" to={'/teams'}/>
+                    <NavMenuLink text="Equipes" to="/teams"/>
                 </NavMenuLink>
                 <NavMenuLink colorHover="#23a6d5" text="Déconnexion" to="/logout"/>
             </ul>

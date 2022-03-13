@@ -6,7 +6,6 @@ import { getUserByToken, refreshToken } from '../api/axiosBase';
 import AuthReducer from '../Components/AuthComponents/Selector/UserSelector';
 import ACTION from '../Components/AuthComponents/Selector/UserAction';
 
-
 export const CheckUserExists = () => {
     const [setUser] = AuthReducer(ACTION.setUser);
 
@@ -21,7 +20,7 @@ export const CheckUserExists = () => {
         }
     }
 
-    const execute = useCallback(() => {
+    const checkUser = useCallback(() => {
         return (async () => {
             let user = null;
             let remember = false;
@@ -46,7 +45,7 @@ export const CheckUserExists = () => {
         })();
     }, []);
 
-    return { execute };
+    return [ checkUser ];
 }
 
 export const Notif = (message, type = 'success', position = 'top-right') => {

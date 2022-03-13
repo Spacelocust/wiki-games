@@ -12,7 +12,7 @@ import ACTION from '../../AuthComponents/Selector/UserAction';
 import Match from '../GameMatchs/Match';
 import PaginationComponent from '../../GeneralComponents/Pagination/PaginationComponent';
 import TwitchComponent from '../../TwitchComponent/TwitchComponent';
-import BetModalResult from '../Bet/BetModalResult';
+import BetModalResult from '../formBet/BetModalResult';
 import { TokenHandler } from '../../../Helpers/errorsHandler';
 
 import LoaderGif from '../../LoaderComponents/LoaderGif';
@@ -22,7 +22,7 @@ function UserBet() {
     const navigate = useNavigate();
     const [user, setUser] = AuthReducer(ACTION.user);
     const [modalExecute] = BetModalResult();
-    const { execute } = TokenHandler();
+    const [checkRefreshToken] = TokenHandler();
 
     const [pagination, setPagination] = useState({ page: 1, maxPage: 0 });
     const [loader, setLoader] = useState(true);
@@ -41,7 +41,7 @@ function UserBet() {
                 data.coinsUser !== user.coins && setUser({ ...user, coins: data.coinsUser, bet: data.bets.betsUpdated });
                 setPagination({ ...pagination, maxPage: data.pagination.maxPage });
             } catch ({ response }) {
-                await execute(response);
+                await checkRefreshToken(response);
             }
         })() : navigate('/');
     }, [user.coins, reload, pagination.page]);

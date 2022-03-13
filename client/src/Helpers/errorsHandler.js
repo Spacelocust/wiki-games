@@ -1,13 +1,12 @@
 import { refreshToken } from '../api/axiosBase';
 import AuthReducer from '../Components/AuthComponents/Selector/UserSelector';
 import ACTION from '../Components/AuthComponents/Selector/UserAction';
-import { useCallback } from 'react';
 import { Notif } from './customHooks';
 
 export const TokenHandler = () => {
     const [user, setUser] = AuthReducer(ACTION.user);
 
-    const execute = async ({ data }, callback = async () => {}) => {
+    const checkRefreshToken = async ({ data }, callback = async () => {}) => {
         if (data.name === 'TokenExpiredError' && user) {
             try {
                 const { data: userRefresh } = await refreshToken(user);
@@ -23,5 +22,5 @@ export const TokenHandler = () => {
         }
     };
 
-    return { execute };
+    return [checkRefreshToken];
 }

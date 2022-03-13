@@ -36,8 +36,8 @@ export const getLeague = (id) => API.get(`/leagues/${id}`);
 export const getTeam = (id) => API.get(`/teams/${id}`);
 
 // Favorite calls
-export const getFavorite = (path = 'teams') => API.get(`/${path}`);
-export const addFavorite = (id, path = 'teams') => API.post(`/${path}/favorite/add`, { id });
-export const deleteFavorite = (id, path = 'teams') => API.delete(`/${path}/favorite/${id}`);
+export const getFavorite = () => API.get(`/teams`);
+export const addFavorite = (id) => API.post(`/teams/favorite/add`, { id });
+export const deleteFavorite = (id) => API.delete(`/teams/favorite/${id}`);
 
 export default API;

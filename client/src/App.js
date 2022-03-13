@@ -7,9 +7,9 @@ import { CheckUserExists } from './Helpers/customHooks';
 import HotKeys from './Components/HotKeysComponent/HotKeys';
 
 function App() {
-    const { execute } = CheckUserExists();
+    const [checkUser] = CheckUserExists();
     useEffect(() => {
-        execute();
+        checkUser();
     }, []);
 
     return <Router>

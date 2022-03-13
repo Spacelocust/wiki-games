@@ -7,33 +7,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 function InputControl({ name, type = 'text', label, placeholder, errors, touched }) {
     const [showPassword, setShowPassword] = useState(false);
-    const classes = (createUseStyles({
-        field: {
-            color: '#fff',
-            backgroundColor: '#373636',
-            border: 'unset',
-            '&:focus': {
-                color: '#fff',
-                outline: '0px!important',
-                boxShadow: 'none!important',
-                backgroundColor: '#414040',
-                transition: 'backgroundcolor 2s ease-in-out'
-            }
-        },
-        iconField: {
-            color: '#fff',
-            marginLeft: '-25px !important',
-            marginTop: '-25px',
-            position: 'relative',
-            zIndex: 2,
-            float: 'right',
-            cursor: 'pointer'
-        },
-        errors: {
-            margin: '0.5rem 0',
-            fontSize: '.8rem!important'
-        }
-    }))();
+    const classes = useStyles();
 
     return <>
         <label htmlFor={name} className="font-secular-uppercase text-medium text-white">{label}</label>
@@ -46,5 +20,33 @@ function InputControl({ name, type = 'text', label, placeholder, errors, touched
             <Alert variant="danger" className={classes.errors}>{errors[name]}</Alert>) : null}
     </>;
 }
+
+const useStyles = createUseStyles({
+    field: {
+        color: '#fff',
+        backgroundColor: '#373636',
+        border: 'unset',
+        '&:focus': {
+            color: '#fff',
+            outline: '0px!important',
+            boxShadow: 'none!important',
+            backgroundColor: '#414040',
+            transition: 'backgroundcolor 2s ease-in-out'
+        }
+    },
+    iconField: {
+        color: '#fff',
+        marginLeft: '-25px !important',
+        marginTop: '-25px',
+        position: 'relative',
+        zIndex: 2,
+        float: 'right',
+        cursor: 'pointer'
+    },
+    errors: {
+        margin: '0.5rem 0',
+        fontSize: '.8rem!important'
+    }
+})
 
 export default InputControl;

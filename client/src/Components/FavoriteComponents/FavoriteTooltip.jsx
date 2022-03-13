@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
-import { isUndefined } from 'lodash';
+import { isEmpty } from 'lodash';
 import { FontAwesomeIcon as IconSetter } from '@fortawesome/react-fontawesome';
 import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as fasStar } from '@fortawesome/free-solid-svg-icons';
@@ -11,16 +11,17 @@ import { useFirstEffect } from '../../Helpers/customHooks';
 import AuthReducer from '../AuthComponents/Selector/UserSelector';
 import ACTION from '../AuthComponents/Selector/UserAction';
 
-function FavoriteTooltip({ item, type = 'teams', favoriteItem, children }) {
+
+function FavoriteTooltip({ item, children }) {
     const [user, setUser] = AuthReducer(ACTION.user);
-    const [active, setActive] = useState(!isUndefined(favoriteItem));
+    const [favTeam, setFavTeam] = useState(!isEmpty(user) && user.favoriteTeam.find(({ teamId }) => teamId === item.id));
+
     const onFavorite = async () => {
-        let objType = type === 'teams' ? 'favoriteTeam' : 'favoriteLeague';
         try {
-            const { data } = await (active ? addFavorite(item, type) : deleteFavorite(favoriteItem.id, type));
+            const { data } = await (favTeam ? addFavorite(item) : deleteFavorite(favTeam.id));
             setUser({
-                ...user, [objType]:
-                    active ? [...user[objType], data] : user[objType].filter(({ id }) => id !== data.id)
+                ...user, teams:
+                    favTeam ? [...user.teams, data] : user.teams.filter(({ id }) => id !== data.id)
             });
         } catch (e) {
             console.error(e);
@@ -28,21 +29,24 @@ function FavoriteTooltip({ item, type = 'teams', favoriteItem, children }) {
     };
 
     useFirstEffect(() => {
-        onFavorite();
-    }, [active]);
+        !isEmpty(user) && onFavorite();
+    }, [favTeam]);
 
-    return <OverlayTrigger
-        placement="top"
-        delay={{ show: 250, hide: 300 * 3 }}
-        overlay={
-            <Popover>
-                <IconSetter icon={active ? fasStar : farStar} className="font-gold font-large"
-                            onClick={() => setActive(!active)}/>
-            </Popover>
+    return <>
+        {!isEmpty(user) ? <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 300 * 3 }}
+            overlay={
+                <Popover>
+                    <IconSetter icon={favTeam ? fasStar : farStar} className="font-gold font-large" onClick={() => setFavTeam(!favTeam)}/>
+                </Popover>
+            }
+        >
+            {children}
+        </OverlayTrigger>
+            : children
         }
-    >
-        {children}
-    </OverlayTrigger>;
+    </>;
 }
 
 export default FavoriteTooltip;

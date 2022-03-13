@@ -5,17 +5,24 @@ import { useParams } from 'react-router-dom';
 import { isEmpty, isNull } from 'lodash';
 
 import API from '../../../api/axiosBase';
+import AuthReducer from '../../AuthComponents/Selector/UserSelector';
+import ACTION from '../../AuthComponents/Selector/UserAction';
+
 import Match from './Match';
-import Bet from '../Bet/Bet';
-import OffcanvasMenu from '../../GeneralComponents/SlideMenu/OffcanvasMenu';
+import FormBet from '../formBet/FormBet';
+
+import TwitchComponent from '../../TwitchComponent/TwitchComponent';
 import PaginationComponent from '../../GeneralComponents/Pagination/PaginationComponent';
+import OffcanvasMenu from '../../GeneralComponents/SlideMenu/OffcanvasMenu';
 import ButtonCustom from '../../GeneralComponents/Buttons/Button/ButtonCustom';
+
 import LoaderGif from '../../LoaderComponents/LoaderGif';
 import gun from '../../../assets/images/gif/gun-valorant.gif';
-import TwitchComponent from '../../TwitchComponent/TwitchComponent';
+
 
 function Matchs() {
     const params = useParams();
+    const [user] = AuthReducer(ACTION.getUser);
     const [loader, setLoader] = useState(true);
     const [pagination, setPagination] = useState({ state: 'upcoming', page: 1, perPage: 5, maxPage: 0 });
 
@@ -52,7 +59,7 @@ function Matchs() {
             }
         })();
         return () => source.cancel();
-    }, [pagination.page, pagination.state]);
+    }, [pagination.page, pagination.state, user]);
 
     const changeMatchSelected = (match) => {
         setLive(false);
@@ -91,7 +98,7 @@ function Matchs() {
             <OffcanvasMenu variants="#fff" closeCallback={() => setBet(!bet)} position={'end'} show={bet}>
                 {matchSelected && <div>
                     <p>{matchSelected.name}</p>
-                    <Bet match={matchSelected} callback={() => setBet(false)}/>
+                    <FormBet match={matchSelected} callback={() => setBet(false)}/>
                 </div>}
             </OffcanvasMenu>
         </div>

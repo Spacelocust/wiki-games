@@ -54,6 +54,7 @@ function Match({ match, callback, stream }) {
                         <Button variant="success" title="Paris" onClick={() => callback(match)}>Parié <LucideCoins
                             height="18px"/></Button>
                     }
+                    <div className='d-flex align-items-center border border-success rounded p-1'>Paris: {match.numberBets}</div>
                 </div>}
             </div> : <div className="text-center" title={match.league.name}><img src={match.league.image_url || empty} alt="" style={{ height: '3rem', width: 'auto' }}/> Match en cours de préparation... </div>}
         </>
@@ -61,9 +62,9 @@ function Match({ match, callback, stream }) {
     );
 }
 
-const CardTeam = ({ user, opponent, status, match, bet }) => (
+const CardTeam = ({ opponent, status, match, bet }) => (
     <div className='d-flex align-items-center flex-column w-50'>
-        <FavoriteTooltip item={opponent.id} favoriteItem={user.favoriteTeam.find(({ teamId }) => teamId === opponent.id)}>
+        <FavoriteTooltip item={opponent.id}>
             <Link to={`/teams/${opponent.id}`}><img src={opponent.image_url || empty} alt="" className={`${(bet && (opponent.id === bet.choice)) && 'border-gold-double rounded'}`} style={{ height: '3rem', width: '100%' }}/></Link>
         </FavoriteTooltip>
         <p className="text-center m-0">{opponent.name}</p>

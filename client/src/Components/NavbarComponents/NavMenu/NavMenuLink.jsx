@@ -1,11 +1,11 @@
-import React, { useState, Children, cloneElement } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { createUseStyles } from "react-jss";
 import { Collapse } from "react-bootstrap";
-import { LinkContainer } from 'react-router-bootstrap';
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as IconSetter } from "@fortawesome/react-fontawesome";
 
-function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
+function NavMenuLink({ children, colorHover, text, img, to }) {
     const [open, setOpen] = useState(false);
 
     const classes = (createUseStyles({
@@ -19,7 +19,7 @@ function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
         link: {
             display: 'flex',
             alignItems: 'center',
-            cursor: 'pointer',
+            cursor: to ? 'pointer' : 'default',
             color: '#fff',
             '&:hover': {
                 color: colorHover,
@@ -48,24 +48,25 @@ function NavMenuLink({ children, colorHover, text, img, to = '/' }) {
     return (
         <>
             <div className={classes.container}>
-                <LinkContainer to={to}>
-                    <li className={`font-secular-uppercase ${classes.link}`}>{img &&
-                        <img src={img} alt="" className={classes.img}/>}{text}</li>
-                </LinkContainer>
+                {to ? <Link to={to}>
+                    <LinkElement className={classes.link} img={img} text={text}/>
+                </Link> : <LinkElement className={classes.link} img={img} text={text}/>}
                 {children && <IconSetter icon={open ? faMinus : faPlus} className={classes.icon} onClick={() => setOpen(!open)}/>}
             </div>
 
             {children && <Collapse in={open}>
                 <div className={classes.linkChildren}>
                     <ul>
-                        {Children.map(children, (child) => (
-                            child.type === "NavMenuLink" ? cloneElement(child, { colorHover }) : child
-                        ))}
+                        { children }
                     </ul>
                 </div>
             </Collapse>}
         </>
     );
 }
+
+const LinkElement = ({ className, img, text }) => (
+    <li className={`font-secular-uppercase ${className}`}>{img && <img src={img} alt="" style={{ width: '1rem', marginRight: '0.5rem' }}/>}{text}</li>
+)
 
 export default NavMenuLink;

@@ -15,9 +15,10 @@ function TeamsFavorite() {
     const navigate = useNavigate();
     const [user] = AuthReducer(ACTION.getUser);
     const [teams, setTeams] = useState([]);
+    const [load, setLoad] = useState(true);
 
     useEffect(() => {
-        if(isEmpty(user)) {
+        if (isEmpty(user)) {
             return navigate('/');
         }
 
@@ -25,20 +26,26 @@ function TeamsFavorite() {
             try {
                 const { data } = await getFavorite();
                 setTeams(data);
+                setLoad(false);
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
         })();
     }, []);
     return (
         <ContainerComponent>
-            <BackButtonComponent />
-            <BodyComponent className='bg-dark text-white'>
+            <BackButtonComponent/>
+            <BodyComponent className="bg-dark text-white rounded p-2">
                 <h2 className="font-secular m-2">Equipes favorites</h2>
-                <div className='d-flex flex-wrap p-2'>
-                    {teams && teams.map(({ id, name, image_url }) => (<div key={id} className="bg-white rounded mx-2 p-1 d-flex align-items-center flex-column">
-                        <Link to={`${id}`}><img src={image_url || empty} alt="" style={{ height: '5rem' }}/></Link>
-                    </div>))}
+                <div className="d-flex flex-wrap p-2">
+
+                    {!load ?
+                        (!isEmpty(teams) ? teams.map(({ id, image_url }) => (
+                            <div key={id} className="bg-white rounded mx-2 p-1 d-flex align-items-center flex-column">
+                                <Link to={`${id}`}><img src={image_url || empty} alt=""
+                                                        style={{ height: '5rem' }}/></Link>
+                            </div>)) : <div>Pas d'équipes...</div>)
+                        : <div>loading...</div>}
                 </div>
             </BodyComponent>
         </ContainerComponent>
