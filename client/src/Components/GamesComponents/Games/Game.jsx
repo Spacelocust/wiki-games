@@ -11,6 +11,7 @@ import LoaderGif from '../../LoaderComponents/LoaderGif';
 import BackButtonComponent from '../../GeneralComponents/Buttons/BackButton/BackButtonComponent';
 import Leagues from '../../LeaguesComponents/GameLeagues/Leagues';
 import Matchs from '../../MatchComponent/GameMatchs/Matchs';
+import GameDetails from './GameDetails/GameDetails';
 
 function Game() {
     const params = useParams();
@@ -41,6 +42,10 @@ function Game() {
             <BackButtonComponent />
             <div className="mt-5">
                 <Header img={game.img_url} title={game.name}/>
+                <BodyComponent className='bg-dark text-light rounded p-1'>
+                    <h2 className="font-secular m-2">Perso</h2>
+                    <GameDetails slug={game.slug} />
+                </BodyComponent>
                 <BodyComponent className='bg-white rounded'>
                     { !isEmpty(game) ?
                         <Leagues leagues={leagues} searchCallback={searchLeagues}/>

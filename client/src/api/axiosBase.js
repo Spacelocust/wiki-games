@@ -24,6 +24,7 @@ export const refreshToken = (value) => API.post('/users/refresh_token', value);
 
 // Game calls
 export const getTeamsByGame = (id) => API.get(`/games/${id}/teams`);
+export const getGameDetails = (slug, page, perPage) => API.get(`/games/${slug}/details/${page}/${perPage}`)
 
 // Matchs calls
 export const getMatchByBet = (value) => API.post(`/matchs/match_bets`, value);

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import League from './League';
 
 function Leagues({ leagues, searchCallback }) {
-    const [close, setClose] = useState(false);
+    const [close, setClose] = useState(true);
     const [inputSearch, setInputSearch] = useState('');
     const classes = useStyles();
     const box = {
