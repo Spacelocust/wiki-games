@@ -12,3 +12,12 @@ export const IMG_GAMES = {
     kog: 'https://uploads-ssl.webflow.com/5fc7600f1faee1304802d3e9/60f1718fb471327a737c0eaf_king-of-glory.svg',
     'lol-wild-rift': 'https://uploads-ssl.webflow.com/5fc7600f1faee1304802d3e9/6166e33cf889591e3a7e83b3_wl-logo.svg',
 }
+
+export const DETAILS_GAMES = (game) => (
+    {
+        ow: { game: 'ow', target: 'heroes' },
+        valorant: { game: 'valorant', target: 'agents' },
+        'league-of-legends': { game: 'lol', target:'champions' },
+        'dota-2': { game: 'dota2', target: 'heroes' },
+    }[game]
+)

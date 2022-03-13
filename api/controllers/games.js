@@ -1,7 +1,8 @@
 import pm from '@prisma/client';
 import parser from 'parse-link-header';
+
 import api from '../axiosBase.js';
-import { IMG_GAMES } from '../constant.js';
+import { DETAILS_GAMES, IMG_GAMES } from '../constant.js';
 
 const { PrismaClient } = pm;
 const client = new PrismaClient();
@@ -37,10 +38,13 @@ export const getGame = async (req, res) => {
 export const getGameMatchesByTime = async (time, req, res) => {
     const { id, page, per_page } = req.params;
     try {
-        let { data: matchs, headers } = await api.get(`/matches/${time}/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
+        let {
+            data: matchs,
+            headers
+        } = await api.get(`/matches/${time}/?filter[videogame]=${id}&page=${page}&per_page=${per_page}`);
         res.set({
             'Content-Type': 'application/json',
-            'Cache-Control': 'max-age: 60',
+            'Cache-Control': 'max-age: 60'
         });
 
         matchs = await matchs.reduce(async (acc, curr) => {
@@ -60,13 +64,13 @@ const getBetMatch = async (id) => {
     try {
         return await client.bet.count({
             where: {
-                match: id,
+                match: id
             }
         });
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
-}
+};
 
 export const getGameTeams = async (req, res) => {
     try {
@@ -79,4 +83,21 @@ export const getGameTeams = async (req, res) => {
     } catch (e) {
         res.status(404).json({ message: 'équipes introuvables' });
     }
-}
+};
+
+export const getGameDetails = async (req, res) => {
+    const { slug, page, per_page } = req.params;
+    const gameParams = DETAILS_GAMES(slug);
+
+    try {
+        if (gameParams !== undefined) {
+            const { data: details, headers } = await api.get(`/${gameParams.game}/${gameParams.target}?page=${page}&per_page=${per_page}`);
+            const link = parser(headers.link);
+
+            return res.send({ list: details, link });
+        }
+        return res.status(200).json({ list: [], link: null });
+    } catch (e) {
+        res.status(404).json({ message: 'Erreur details indisponible' });
+    }
+};
