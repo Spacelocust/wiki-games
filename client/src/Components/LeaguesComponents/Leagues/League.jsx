@@ -12,7 +12,6 @@ function League() {
             try {
                 const { data } = await getLeague(params.id);
                 setLeague(data);
-                console.log(data);
             } catch (e) {
                 console.log(e)
             }

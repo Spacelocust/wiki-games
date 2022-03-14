@@ -29,6 +29,7 @@ function Match({ match, callback, stream }) {
                 <div className="d-flex justify-content-between">
                     <div className="d-flex">
                         <BadgeComponent className={`font-small`} variants={status.color}>{status.label}</BadgeComponent>
+                        {matchBet && <BadgeComponent className={`font-small`} variants='orange'>{matchBet.coins} coins</BadgeComponent>}
                         {(status === STATUS_MATCH.finished && matchBet) && <BadgeComponent
                             className={`font-small bg-${match.winner_id === matchBet.choice ? 'success' : 'danger'}`}>{match.winner_id === matchBet.choice ? 'Gagné' : 'Perdu'}</BadgeComponent>}
                         {(status === STATUS_MATCH.running && onLive) &&
